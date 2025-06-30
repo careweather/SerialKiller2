@@ -1,0 +1,29 @@
+@dcon ## Ensure disconnected 
+@clear
+@args 50 100 #default arguments
+@info $ARG
+@delay=$ARG0
+@exitcmd=@plot pause
+#@exitcmd=@plot export example.csv --round 100 --open # Uncomment me to open the csv file
+######################### COMMENT ME OUT FOR KEY-VALUE
+@plot key-value --keys "A,B,C,D" --points $ARG1 --title 'example key-value' --refs -1,0,1 --limits -1.1,1.1
+@loop
+plot test "A:${math.sin($LOOP * .25) * 3} B:${math.cos($LOOP * .5)} D:${-math.cos($LOOP * .3)}"
+plot test "C:${float(np.random.rand(1)) - .5}"
+@endloop
+######################### COMMENT ME BACK IN FOR INDEX-VALUE
+#plot index-value --keys "A*2,B/2" --points 100 --refs -1,1
+#@loop
+#plot test "${math.sin($LOOP * .25)} ${math.cos($LOOP * 100)} ${math.cos($LOOP * .3)} BBB 1.5 .25"
+#@endloop
+######################### SINGLE-ARRAY 
+@plot single-array --points 20 --refs -1,1 --seps ', :;=\t[]'
+@loop
+plot test "${[str(-np.random.rand(1)) for x in range(50)]}"
+plot test "${[str(np.random.rand(1)) for x in range(10)]}"
+@endloop
+######################### Key-Array
+@plot key-array --points 20 --refs "0" --seps ", :;=\t[]'" --keys "X,Y,Z"
+@loop
+plot test " X: ${[str(float(np.random.rand(1) * -1)) for x in range(20)]} Y: ${[str(float(np.random.rand(1))) for x in range(25)]} "
+@endloop

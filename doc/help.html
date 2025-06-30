@@ -1,0 +1,41 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0//EN" "http://www.w3.org/TR/REC-html40/strict.dtd">
+<html><head><meta name="qrichtext" content="1" /><meta charset="utf-8" /><style type="text/css">
+p, li { white-space: pre-wrap; }
+hr { height: 1px; border-width: 0; }
+li.unchecked::marker { content: "\2610"; }
+li.checked::marker { content: "\2612"; }
+</style></head><body style=" font-family:'Ubuntu'; font-size:11pt; font-weight:400; font-style:normal;">
+<h1 style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;"><span style=" font-size:xx-large; font-weight:700;">Serial Killer Help</span></h1>
+<h1 style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;"><span style=" font-size:xx-large; font-weight:700;">GUI</span></h1>
+<hr />
+<h1 style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;"><span style=" font-size:xx-large; font-weight:700;">Terminal</span></h1>
+<hr />
+<h1 style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;"><span style=" font-size:xx-large; font-weight:700;">Scripts</span></h1>
+<hr />
+<h1 style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;"><span style=" font-size:xx-large; font-weight:700;">Extensions</span></h1>
+<hr />
+<h1 style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;"><span style=" font-size:xx-large; font-weight:700;">Plotting</span></h1>
+<h3 style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;"><span style=" font-size:large; font-weight:700;">Parsing</span></h3>
+<p style=" margin-top:7px; margin-bottom:7px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;">Incoming data is interpreted line-by-line. Each line is split into tokens based on any characters in the &quot;seps&quot; <span style=" font-weight:700;">textbox</span>.</p>
+<p style=" margin-top:7px; margin-bottom:7px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;">If multiple separators appear back-to-back, they are treated as a single separator.</p>
+<p style=" margin-top:7px; margin-bottom:7px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;">Assuming our separators are &quot; ,:;=&quot;, the inputs &quot;A:1 B:2 C:3&quot; and &quot;A 1, B: 2;  C=3&quot; are both split into the tokens [&quot;A&quot;, &quot;1&quot;, &quot;B&quot;, &quot;2&quot;, &quot;C&quot;, &quot;3&quot;]</p>
+<h3 style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;"><span style=" font-size:large; font-weight:700;">Key-Value</span></h3>
+<p style=" margin-top:7px; margin-bottom:7px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;">This plots multiple lines over time. The incoming data is generally formatted in some variation of &quot;KEY1=VALUE KEY2=VALUE KEY3=VALUE&quot;.</p>
+<p style=" margin-top:7px; margin-bottom:7px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;">For example:</p>
+<p style=" margin-top:7px; margin-bottom:7px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;"><span style=" font-family:'monospace';">GYRO_X:150, HELLO, GYRO_Y:200, GYRO_Z:400, 333</span></p>
+<p style=" margin-top:7px; margin-bottom:7px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;">When Tokenized becomes:</p>
+<p style=" margin-top:7px; margin-bottom:7px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;"><span style=" font-family:'monospace';">[&quot;GYRO_X&quot;, 150.0, &quot;HELLO&quot;, &quot;GYRO_Y&quot;, 200.0, GYRO_Z, 400.0, 333.0]</span></p>
+<p style=" margin-top:7px; margin-bottom:7px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;">Then interpreted as key-value pairs:</p>
+<p style=" margin-top:7px; margin-bottom:7px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;"><span style=" font-family:'monospace';">GYRO_X:150.0, GYRO_Y:200.0, GYRO_Z:400.0</span></p>
+<p style=" margin-top:7px; margin-bottom:7px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;">Note that the trailing &quot;333&quot; is ignored because it doesn't have a preceding key and &quot;HELLO&quot; is ignored because it doesnt have a value following it.</p>
+<h4 style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;"><span style=" font-size:medium; font-weight:700;">Key filtering and modifying</span></h4>
+<p style=" margin-top:7px; margin-bottom:7px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;">If only want to plot certain keys, use the &quot;Keys&quot; textbox. Separate each specific key with any separator in the &quot;Seps&quot; textbox.</p>
+<p style=" margin-top:7px; margin-bottom:7px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;">For the example above if we set the &quot;Keys&quot; textbox to &quot;GYRO_X,GYRO_Z&quot;, the GYRO_Y key would be filtered out and we would be left with:</p>
+<p style=" margin-top:7px; margin-bottom:7px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;"><span style=" font-family:'monospace';">GYRO_X:150.0, GYRO_Z:400.0</span></p>
+<p style=" margin-top:7px; margin-bottom:7px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;">Additionally, the &quot;Keys&quot; textbox can be used to set a scale for a specific key. If we append a &quot;*[SCALE]&quot; to the end of a key, the plotted values will be multiplied by [SCALE]. In our example, if we set the keys to <span style=" font-family:'monospace';">GYRO_X*2,GYRO_Z</span> the result would be:</p>
+<p style=" margin-top:7px; margin-bottom:7px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;"><span style=" font-family:'monospace';">GYRO_X:300.0, GYRO_Z:400.0</span></p>
+<hr />
+<h1 style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;"><span style=" font-size:xx-large; font-weight:700;">Logs</span></h1>
+<hr />
+<h1 style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;"><span style=" font-size:xx-large; font-weight:700;">Keyboard Control</span></h1>
+<hr /></body></html>

@@ -1,0 +1,8 @@
+numpy==1.21.5
+pygit2==1.16.0
+PyQt6==6.9.1
+PyQt6_sip==13.6.0
+pyqtgraph==0.12.4
+pyqtgraph==0.13.7
+pyserial==3.5
+termcolor==3.1.0

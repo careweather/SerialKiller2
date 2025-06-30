@@ -1,0 +1,1 @@
+This is an example log. Your Logs will appear in this folder.

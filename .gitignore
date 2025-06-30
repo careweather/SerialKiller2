@@ -1,0 +1,16 @@
+__pycache__/
+extensions/__pycache__/
+logs/*
+!logs/example.txt
+extensions/*
+settings/*.json
+!settings/empty.json
+scripts/*
+!scripts/example.txt
+!scripts/example_loops.txt
+!scripts/example_plot.txt 
+!scripts/example_cowsay.txt 
+!extensions/example_echo.py
+!extensions/template.py
+!extensions/example_loop.py
+.vscode/

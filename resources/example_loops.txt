@@ -1,0 +1,21 @@
+@delay=50
+@dcon
+@info this script demos loops in scripting
+@info this is a loop incrementing from 0 to 4
+@loop 5
+ >The index is $LOOP
+@endloop
+
+@info this is a loop decrementing from 4 to 0
+@loop -5
+ >The index is $LOOP
+@endloop
+
+@info this is a nested loop
+@loop -5 
+	@loop 5
+ 		>The index is $LOOP
+	@endloop
+@endloop
+
+

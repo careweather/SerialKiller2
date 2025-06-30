@@ -1,0 +1,35 @@
+# This is a commented out line  
+@clear # It can occur mid-line
+@dcon # Ensure no device is connected... 
+@args 1000
+@delay=$ARG0
+This is an example script! Edit it in the "script" tab. 
+To exit a script while it's running press "ESC"
+Each line in the script is copied to the "Send" textbox.
+And sent after a delay. 
+Lines starting with "@" are interpreted as commands to serial-killer
+They are executed without any delay.
+See, i'll list what ports are availiable. 
+@wait=2000
+@ports -a
+@wait=1000
+Scripts also have basic language features
+@delay=200
+@loop=5
+like loops [$LOOP0]
+@endloop
+etc... 
+@delay=1000
+@wait=1000
+@clear
+cowsay there are other examples in your script directory
+@wait=1500
+@clear
+cowsay "here i'll list them for you"
+@wait=1000
+@script -ls
+@wait=500
+@info-g to open another script use 'script -o [filename]'
+
+
+

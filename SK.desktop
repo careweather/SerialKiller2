@@ -1,0 +1,9 @@
+[Desktop Entry]
+Version=1.0
+Name=Serial-Killer2
+Comment=Serial Interface program
+Exec=<PATH_TO_PYTHON> <PATH_TO_SERIAL_KILLER>/SK.py -x 600 -y 700 
+Path=<PATH_TO_SERIAL_KILLER>
+Icon=<PATH_TO_SERIAL_KILLER>/img/SK_Icon.png
+Terminal=True
+Type=Application
