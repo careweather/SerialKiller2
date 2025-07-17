@@ -14,3 +14,4 @@ scripts/*
 !extensions/template.py
 !extensions/example_loop.py
 .vscode/
+.venv/
