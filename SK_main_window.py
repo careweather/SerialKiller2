@@ -730,7 +730,7 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
             if args or kwargs:
                 self.serial_disconnect()
             else:
-                self.set_debug_text("Already Connected", color=COLOR_LIGHT_YELLOW)
+                self.set_debug_text("Already Connected", color=COLOR_DARK_YELLOW)
                 return
         if ser.is_open:
             self.set_debug_text("Cannot Disconnect!", color=COLOR_RED)
@@ -862,7 +862,7 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
 
     def serial_send(self, text: str | bytes):
         if not ser.is_open:
-            self.set_debug_text("Warning: Not Connected", color=COLOR_LIGHT_YELLOW)
+            self.set_debug_text("Warning: Not Connected", color=COLOR_DARK_YELLOW)
             return
         try:
             ser.flush()
@@ -878,7 +878,7 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         dprint("serial_disconnect. intentional = ", intentional, color="yellow")
         if not ser.is_open:
             if intentional:
-                self.set_debug_text("Already Disconnected", color=COLOR_LIGHT_YELLOW)
+                self.set_debug_text("Already Disconnected", color=COLOR_DARK_YELLOW)
             return
 
         if intentional:
@@ -897,7 +897,7 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
 
         ## UI CHANGES
         self.terminal.set_background_color(COLOR_DARK_GREY)
-        self.set_debug_text("Disconnected", color=COLOR_LIGHT_YELLOW)
+        self.set_debug_text("Disconnected", color=COLOR_DARK_YELLOW)
         self.terminal_add_text("Disconnected", type=TYPE_INFO)
         self.pushButton_connect.setStyleSheet(STYLESHEET_BUTTON_INACTIVE)
         self.pushButton_connect.setText("Connect")
@@ -1141,7 +1141,7 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
 
     def list_ports(self, *args, **kwargs):
         if not self.ports:
-            self.set_debug_text("No ports found", color=COLOR_LIGHT_YELLOW)
+            self.set_debug_text("No ports found", color=COLOR_DARK_YELLOW)
             self.terminal_add_text("No ports found", type=TYPE_INFO)
             return
 
@@ -1152,7 +1152,7 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
             p_str += f"({index:<3}) {port.Display:<15} {port.Prod}\n"
             if args:
                 p_str += port.info()
-        self.set_debug_text(small_str, color=COLOR_LIGHT_YELLOW)
+        self.set_debug_text(small_str, color=COLOR_DARK_YELLOW)
         self.terminal_add_text(p_str.removesuffix("\n"), type=TYPE_INFO)
 
     def update_ports(self, ports: list[SK_Port]):
@@ -1839,7 +1839,7 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         self.script_worker.finished.connect(self.stop_script)
         self.script_thread.start()
 
-        self.set_debug_text("Use ESC to cancel script", color=COLOR_LIGHT_YELLOW)
+        self.set_debug_text("Use ESC to cancel script", color=COLOR_DARK_YELLOW)
         self.tabWidget.setCurrentIndex(0)
 
         ## UI CHANGES
@@ -1868,7 +1868,7 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         if error:
             self.terminal_add_text(error, type=TYPE_INFO)
 
-        self.set_debug_text(f"Script Finished in: {time.perf_counter() - self.script_worker.start_time:.2f}s", color=COLOR_LIGHT_YELLOW)
+        self.set_debug_text(f"Script Finished in: {time.perf_counter() - self.script_worker.start_time:.2f}s", color=COLOR_DARK_YELLOW)
         vprint(f"Script Stopped. Error: {error}", color="green")
 
         self.script_worker.stop()
