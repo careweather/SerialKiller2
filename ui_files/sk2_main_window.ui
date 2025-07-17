@@ -287,7 +287,7 @@
        <enum>QTabWidget::Rounded</enum>
       </property>
       <property name="currentIndex">
-       <number>3</number>
+       <number>1</number>
       </property>
       <property name="elideMode">
        <enum>Qt::ElideNone</enum>
@@ -436,7 +436,7 @@
          </widget>
         </item>
         <item row="2" column="0" colspan="8">
-         <widget class="QTextEdit" name="textEdit_script">
+         <widget class="ScriptTextEdit" name="textEdit_script">
           <property name="font">
            <font>
             <family>Ubuntu Mono</family>
@@ -2736,6 +2736,11 @@ p, li { white-space: pre-wrap; }
    <extends>QWidget</extends>
    <header>SK_plot_widget</header>
    <container>1</container>
+  </customwidget>
+  <customwidget>
+   <class>ScriptTextEdit</class>
+   <extends>QTextEdit</extends>
+   <header location="global">SK_widgets</header>
   </customwidget>
  </customwidgets>
  <tabstops>

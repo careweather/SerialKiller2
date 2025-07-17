@@ -181,7 +181,7 @@ class Ui_MainWindow(object):
         self.pushButton_open_script.setSizePolicy(sizePolicy)
         self.pushButton_open_script.setObjectName("pushButton_open_script")
         self.gridLayout_12.addWidget(self.pushButton_open_script, 0, 7, 1, 1)
-        self.textEdit_script = QtWidgets.QTextEdit(parent=self.script)
+        self.textEdit_script = ScriptTextEdit(parent=self.script)
         font = QtGui.QFont()
         font.setFamily("Ubuntu Mono")
         font.setPointSize(11)
@@ -1154,7 +1154,7 @@ class Ui_MainWindow(object):
         self.menubar.addAction(self.menuHelp.menuAction())
 
         self.retranslateUi(MainWindow)
-        self.tabWidget.setCurrentIndex(5)
+        self.tabWidget.setCurrentIndex(1)
         QtCore.QMetaObject.connectSlotsByName(MainWindow)
         MainWindow.setTabOrder(self.lineEdit_send, self.terminal)
         MainWindow.setTabOrder(self.terminal, self.lineEdit_key_ctrl)
@@ -1510,4 +1510,4 @@ class Ui_MainWindow(object):
         self.actionAuto_Save.setText(_translate("MainWindow", "Auto-Save"))
 from SK_plot_widget import PlotWidget
 from SK_terminal import TerminalWidget
-from SK_widgets import CaptureLineEdit, CollapsingGroupBox
+from SK_widgets import CaptureLineEdit, CollapsingGroupBox, ScriptTextEdit
