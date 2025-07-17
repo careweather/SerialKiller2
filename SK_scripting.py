@@ -93,6 +93,10 @@ class ScriptWorker(QObject):
 
     def handle_command(self, command:str):
         command = command.strip()
+        command, error = evaluate_line(command)
+        if error:
+            self.output.emit((error, TYPE_ERROR))
+            return True 
         vprint(f"[SCRIPT] Command: {command}", color="yellow")
         if command.startswith("loop"):
             command = command.replace("=", " ").replace(",", " ")

@@ -156,7 +156,9 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
                     Option(("-o", "--open", "open")),
                     Option(("-s", "--save", "save")),
                     Option(("-n", "--new", "new")),
-                    Option(("-ls", "list")),
+                    Option(("-ls", "--list")),
+                    Option(("on", "--on")),
+                    Option(("off", "--off")),
                     Option(("--line-fmt",)),
                     Option(("--time-fmt",)),
                 ],
@@ -199,6 +201,7 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
                     Option(("-ls", "--list")),
                     Option(("-h", "--help")),
                     Option(("--clear", "clear")),
+                    Option(("--save", "-s"), type=str, default=None),
                 ],
             ),
             Command(
@@ -266,6 +269,7 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         self.terminal.setPlaceholderText(TERMINAL_PLACEHOLDER)
 
         self.textEdit_script.setTabStopDistance(20)
+        # self.textEdit_script.
         self.tableWidget_expressions.itemChanged.connect(self.user_expressions_edited)
         self.tableWidget_keys.itemChanged.connect(self.key_commands_edited)
         self.tableWidget_expressions.horizontalHeader().setStretchLastSection(True)
@@ -969,6 +973,12 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         if "-h" in kwargs:
             self.terminal_add_text(LOG_HELP, type=TYPE_INFO)
             return
+        
+        if "on" in kwargs:
+            self.checkBox_auto_log.setChecked(True)
+
+        if "off" in kwargs:
+            self.checkBox_auto_log.setChecked(False)
 
         if "--line-fmt" in kwargs and kwargs["--line-fmt"]:
             self.lineEdit_log_line_format.setText(kwargs["--line-fmt"])
@@ -2138,25 +2148,30 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
             self.terminal_add_text(KEY_COMMAND_HELP, TYPE_INFO)
             self.tabWidget.setCurrentIndex(0)
             return
-        if "-ls" in kwargs:
+        elif "-ls" in kwargs:
             t = pretty_format_dict(self.current_settings["key_commands"])
             self.terminal_add_text(t, TYPE_INFO)
             self.tabWidget.setCurrentIndex(0)
             return
-        if "--clear" in kwargs:
+        elif "--clear" in kwargs:
             self.tableWidget_keys.setRowCount(0)
             self.tableWidget_keys.setRowCount(1)
             self.key_commands_edited()
+            return
+        elif "--save" in kwargs: 
+            self.key_export_script(kwargs["--save"])
             return
 
         if len(args) == 2:
             self.add_key_command(args[0], args[1])
 
-    def key_export_script(self):
-        filepath = self.get_save_file_popup(self.lineEdit_script_dir.text(), extensions="*.txt", title = "Export Key Commands")
+    def key_export_script(self, filepath: str = None):
         if not filepath:
-            return
+            filepath = self.get_save_file_popup(self.lineEdit_script_dir.text(), extensions="*.txt", title = "Export Key Commands")
+            if not filepath:
+                return
         
+        filepath = clean_filepath(filepath, default_path=self.lineEdit_script_dir.text(), extensions=".txt")
         dprint(f"Exporting Key Commands to {filepath}", color = "green")
         vprint(self.current_settings["key_commands"], color="green")
     

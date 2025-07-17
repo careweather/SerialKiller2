@@ -11,6 +11,7 @@ help                    Open help window
 clear                   Clear the terminal 
 con [port] [-b baud]    Make a serial connection (optional [port])
 dcon                    Disconnect from the device
+alias [name]            Set the alias for the current serial port
 ports [-a]              List available ports. Use -a to show all available info
 script [args ...]       Run the script in the script tab (optional args)
 script -o [file]        Open a script (optional [file].txt)
@@ -24,6 +25,7 @@ plot [cmd] [args]       Configure or control the plotting feature (use -h for mo
 key [char] [value]      Set a new keyboard command 
 ext [filename] [args]   Load an extension with the name [filename].py
 ext [OPTIONS]           Configure or control the extension feature (use -h for more info)
+ext end                 End the currently running extension
 exit                    Exit the program 
 """
 
@@ -32,19 +34,17 @@ CONNECT_HELP = """\
 USEAGE: 
 con [port] [OPTIONS]
 
-if [port] isn't included, the one selected by the dropdown menu is used. 
-
 [port] only needs to match the end of the port name. 
-ie. if "/dev/ttyACM0" exists "con ACM0" is valid. 
+ie. if "/dev/ttyACM0" exists "con 0" is valid. 
 
-if no OPTIONS are included, the settings defined in the GUI are used
+if no port or options are provided, the settings defined in the GUI are used 
 
 OPTIONS: 
-    -b, --baud <baudrate>
-    -p, --parity [NONE|EVEN|ODD|MARK|SPACE]
-    -x, --xonxoff [1|0]
-    -r, --rtscts [1|0]
-    -d, --dsrdtr [1|0]
+    -b, --baud      <baudrate>
+    -p, --parity    [NONE|EVEN|ODD|MARK|SPACE]
+    -x, --xonxoff   [1|0]
+    -r, --rtscts    [1|0]
+    -d, --dsrdtr    [1|0]
 
 EXAMPLES: 
 connect to the port ending in "ACM0". Set baud to 115200, and enable xonxoff
@@ -52,7 +52,6 @@ connect to the port ending in "ACM0". Set baud to 115200, and enable xonxoff
 
 connect to the currently selected port at 9600
     con --baud 9600 
-
 """
 
 SETTINGS_HELP = """\
@@ -145,25 +144,33 @@ log                             Opens the current log file
 log [OPTIONS]                   
 
 OPTIONS: 
-    -h, --help                  Print this help text 
+    on, --on                    Enable logging
+    off, --off                  Disable logging
     -o, --open [filename]       Opens a log file from the directory 
     -s, --save [filename]       Saves the current log file to another file. 
     -n, --new [filename]        Starts logging to a new file. 
     -ls, --list                 List all log files in the directory 
     --line-fmt [format]         Set the format of the log lines 
     --time-fmt [format]         Set the format of the log timestamps 
+    -h, --help                  Print this help text 
 
 EXAMPLES: 
+Open a log named data.txt 
     log -o data.txt
+Save the current log to a new file called my_log.txt
+    log -s my_log.txt
+
 """
 
 KEY_COMMAND_HELP = """\
 USEAGE: 
-key                 (jump to key textedit)
-key clear           (clear all key commands)
-key -ls             (list all key commands)
-key -h              (print this help text)
-key [char] [value]  (set a key command)
+key                     jump to key textedit
+key [key] [send]        set a key command
+key clear               clear all key commands
+key -ls                 list all key commands
+key -h                  print this help text
+
+For non character keys use: UP,DOWN,LEFT,RIGHT,RETURN,ENTER,TAB,BACKSPACE
 """
 
 SCRIPT_HELP = """\
