@@ -81,6 +81,7 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
 
     def __init__(self, *args, open_commands=[], **kwargs):
         super().__init__(*args, **kwargs)
+        self.init_done = False
         self.setupUi(self)
         setComboBox_items(self.comboBox_baud, serial.Serial.BAUDRATES)
         setComboBox_items(self.comboBox_parity, PARITIES)
