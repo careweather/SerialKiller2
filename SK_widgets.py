@@ -88,7 +88,7 @@ class ScriptTextEdit(QtWidgets.QTextEdit):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.setTabStopDistance(20)
-        print("ScriptTextEdit init", args, kwargs)
+        # print("ScriptTextEdit init", args, kwargs)
 
     def insertFromMimeData(self, source: QtCore.QMimeData):
         #print("insertFromMimeData", source)

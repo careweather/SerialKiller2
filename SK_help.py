@@ -311,5 +311,6 @@ COW_WISDOM = [
     "whats your credit card number? ",
     "cowsay it ain't so",
     "you got any games on your phone?",
-    ";)"
+    ";)",
+    "The fitness gram pacer test for aerobic capacity can be used to test your aerobic capacity. ",
 ]

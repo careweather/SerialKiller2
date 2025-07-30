@@ -94,6 +94,7 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         self.label_status_bar.setSizePolicy(QtWidgets.QSizePolicy.Policy.MinimumExpanding, QtWidgets.QSizePolicy.Policy.Expanding)
         #self.label_status_bar.setWordWrap(True)
         self.label_status_bar.setTextFormat(QtCore.Qt.TextFormat.PlainText)
+        self.label_status_bar.setFont(QtGui.QFont("Monospace", 8))
 
         self.statusBar().addWidget(self.label_status_bar)
         self.connect_ui()
@@ -243,6 +244,8 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         self.lineEdit_send.setFocus()
         self.log_config_changed()
 
+        
+
         if open_commands:
             while open_commands:
                 open_command = open_commands.pop(0)
@@ -255,11 +258,15 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         self.wrap_text_toggled()
         self.extension_debug_level_changed(0)
         self.init_time = time.time()
+        # self.statusBar().setFont(QtGui.QFont("Monospace"))
+        # print(self.statusBar().font().family())
 
         self.update_status_bar()
         # time.sleep(0.2)
         self.pushButton_save_as_script.setStyleSheet(STYLESHEET_BUTTON_DEFAULT)
         self.textEdit_script.textChanged.connect(self.script_edited)
+
+
         #####################################################################################
         self.init_done = True  ## THIS MUST BE THE LAST LINE OF __INIT__ ###
         #####################################################################################
