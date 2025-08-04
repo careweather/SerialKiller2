@@ -9,7 +9,10 @@ scripts/*
 !scripts/example.txt
 !scripts/example_loops.txt
 !scripts/example_plot.txt 
-!scripts/example_cowsay.txt 
+!scripts/example_cowsay.txt
+!scripts/init_file_RC0A.txt
+!scripts/init_file_RC0B.txt
+!scripts/init_file_RC0C.txt
 !extensions/example_echo.py
 !extensions/template.py
 !extensions/example_loop.py
