@@ -360,8 +360,6 @@ For example, if we have incoming data like this:
 
 Extensions allow you to write your own python interfaces for serial devices with minimal hassle. An extension is a python class that inherits from a common `SK_Extension` class. The derived class overrides functions that are called when certain events occur in the main window, such as incoming serial data, a port is connected, the extension is terminated, etc. 
 
-When your extension is loaded in the main window, it is 
-
 Example uses for extensions: 
 - Forwarding incoming serial data to a server
 - Custom parsing and analysis of incoming serial data 
