@@ -1,8 +1,7 @@
 @info this script sets up satellite for indoor adcs testing
 @delay=500
 f.clr=bb_lock;f.clr=bb_run;f.clr=radar;
-f.wln="bb_run,a.upd=2000;a.dur=500;f.clr=adcs;g.log=adcs;bb.cmd=adcs -g false -f 582;g.log=adcs";
+f.wln="bb_run,a.upd=2000;a.dur=500;a.fmt=4678;f.clr=adcs;g.log=adcs;bb.cmd=adcs -g false -f 582;g.log=adcs";
 rw.cfg=1;bb.cfg=6;i.cfg=0;
 g.timeout=300;bb.timeout=500000;
 f.wln="bb_run,bb.cmd=radar -b 4 -ch 8 && process -c 195";
-rw.mult=1,1,1;

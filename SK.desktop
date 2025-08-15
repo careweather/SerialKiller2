@@ -2,8 +2,9 @@
 Version=1.0
 Name=Serial-Killer2
 Comment=Serial Interface program
-Exec=<PATH_TO_PYTHON> <PATH_TO_SERIAL_KILLER>/SK.py -x 600 -y 700 
-Path=<PATH_TO_SERIAL_KILLER>
-Icon=<PATH_TO_SERIAL_KILLER>/img/SK_Icon.png
-Terminal=True
+Exec=/home/chris/careweather/SerialKiller2/.venv/bin/python /home/chris/careweather/SerialKiller2/SK.py -x 600 -y 700
+Path=/home/chris/careweather/SerialKiller2
+Icon=/home/chris/careweather/SerialKiller2/img/SK_Icon.png
+Terminal=false
 Type=Application
+Categories=Development;Electronics;
