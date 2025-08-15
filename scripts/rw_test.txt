@@ -1,0 +1,16 @@
+f.clr=adcs;
+f.track=1;
+@wait=100
+@delay=50
+a.fmt=3584;
+a.upd=250;
+a.dur=413;
+a.status=1;
+rw.cfg=1;
+rw.begin;
+@wait=200
+rw.setpwm=3000,0,0;
+@delay=3000
+rw.setpwm=0,3000,0;
+rw.setpwm=0,0,3000;
+rw.setpwm=0,0,0;

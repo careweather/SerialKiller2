@@ -1,0 +1,12 @@
+@delay=50
+>f.clr=bb_init;f.clr=bb_lock;bb.begin;bb.cfg=4;
+>%f.wln=bb_init,bb.cmd="cd /root && patch -p1 < mychange.patch";
+>%f.wln=bb_init,bb.cmd="get-file /root/Config.toml";bb.end;
+@end
+
+f.wln="extra, pointing_tolerance = 0.03";
+f.wln="extra,-pointing_timeout = 60";
+f.wln="extra,+pointing_timeout = 600";
+f.wln="extra, ";
+f.wln="extra, [control.feedback_config]";
+f.wln="extra, p = 0.48";

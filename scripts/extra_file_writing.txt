@@ -1,0 +1,7 @@
+@delay=1000
+f.wln="extra, pointing_tolerance = 0.03";
+f.wln="extra,-pointing_timeout = 60";
+f.wln="extra,+pointing_timeout = 600";
+f.wln="extra, ";
+f.wln="extra, [control.feedback_config]";
+f.wln="extra, p = 0.48";

@@ -5,7 +5,6 @@ logs/*
 extensions/*
 settings/*.json
 !settings/empty.json
-scripts/*
 !scripts/example.txt
 !scripts/example_loops.txt
 !scripts/example_plot.txt 
