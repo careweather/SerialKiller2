@@ -1,4 +1,4 @@
-@info this script sets up satellite for indoor adcs testing
+@info=This script sets up satellite for indoor adcs testing
 @delay=500
 f.clr=bb_lock;f.clr=bb_run;f.clr=radar;
 f.wln="bb_run,a.upd=500;a.dur=200;a.fmt=70212;f.clr=adcs;g.log=adcs;bb.cmd=adcs -g false -T 200;g.log=adcs";
