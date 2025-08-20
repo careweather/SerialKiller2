@@ -1,0 +1,17 @@
+@info=Starting Reaction wheel magnetometer testing
+@delay=500
+testprint=1;
+@plot key-value --keys "MAGX,MAGY,MAGZ,MAG3X,MAG3Y,MAG3Z,RPM0,RPM1,RPM2" --points 1000 --title 'Magnetometer output'
+rw.cfg=1;rw.begin;
+@wait=5000
+@delay=10000
+rw.setpwm=3000,0,0;
+rw.setpwm=0,3000,0;
+rw.setpwm=0,0,3000;
+rw.setpwm=0,0,0;
+@wait=5000
+@delay=10000
+rw.setpwm=-3000,0,0;
+rw.setpwm=0,-3000,0;
+rw.setpwm=0,0,-3000;
+rw.setpwm=0,0,0;
