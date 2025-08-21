@@ -1,0 +1,6 @@
+@info this script sets up satellite for indoor adcs testing
+@delay=50
+@plot key-value --keys "HX,HY,HZ" --points 1000 --title 'Magnetometer Output Helmholtz Mag'
+@loop
+hmr.print;
+@endloop
