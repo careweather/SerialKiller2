@@ -1,4 +1,4 @@
-@info this script sets up satellite for indoor adcs testing
+@info=Plotting the helmholtz magnetometer output every 100 milliseconds.
 @delay=50
 @plot key-value --keys "HX,HY,HZ" --points 1000 --title 'Magnetometer Output Helmholtz Mag'
 ptime=100;
