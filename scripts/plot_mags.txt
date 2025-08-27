@@ -1,5 +1,8 @@
 @info=Starting Reaction wheel magnetometer testing
 @delay=500
+@exitcmd=testprint=0
 testprint=1;
 @plot key-value --keys "MAGX,MAGY,MAGZ,MAG3X,MAG3Y,MAG3Z" --points 1000 --title 'Magnetometer Output Satellite Magnetometers'
-
+@loop
+@wait=100
+@endloop

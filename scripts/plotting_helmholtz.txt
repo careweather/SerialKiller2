@@ -1,4 +1,15 @@
-@info=Plotting the helmholtz magnetometer output every 100 milliseconds.
+@info=Plotting the helmholtz magnetometer output every 100 milliseconds And commanding magnetometer values
 @delay=50
 @plot key-value --keys "HX,HY,HZ" --points 1000 --title 'Magnetometer Output Helmholtz Mag'
 ptime=100;
+@delay=10000
+@exitcmd=testprint=0
+@loop
+target=0,0,0
+target=1000,0,0
+target=-1000,0,0
+target=0,1000,0
+target=0,-1000,0
+target=0,0,1000
+target=0,0,-1000
+@endloop

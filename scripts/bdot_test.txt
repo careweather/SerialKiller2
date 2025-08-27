@@ -1,5 +1,5 @@
 @info=This script sets up satellite for indoor Bdot testing
 @delay=500
 f.clr=adcs;a.fmt=98308;a.upd=3000;a.dur=1706;
-@info=You now have 20 seconds to spin the satellite in a stable manner.
-wait=20000;a.status=1;bdot.en=0;
+gybdot.magtorqcollect=1;
+gybdot.start;
