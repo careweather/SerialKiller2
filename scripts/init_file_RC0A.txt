@@ -1,5 +1,5 @@
-@info This file will replace the lost init file for Veery 0.5-rc0A specifically! Based on the test results in the notion 0.x Build and test results.
-@delay=1000
+@info=This file will replace the lost init file for Veery 0.5-rc0A specifically! Based on the test results in the notion 0.x Build and test results.
+@delay=500
 f.clr=init;
 f.wln="init,$gyroDEP.offset=163.8986,136.3212,2.8857;";
 f.wln="init,$gyroDEP.sd=52.0165,50.9199,41.3113;";
