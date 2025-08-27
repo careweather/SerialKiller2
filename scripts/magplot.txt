@@ -1,0 +1,8 @@
+# This is a script for plotting mag values 
+@args 100 500
+@delay $ARG0
+@plot key-value --keys "MAGX,MAGY,MAGZ,MAG2X,MAG2Y,MAG2Z,MAG3X,MAG3Y,MAG3Z" --points $ARG1 --refs "-500,0,500" --limits ""
+#mag3.remap=-1,-2,3
+@loop
+mag.print;mag2.print;mag3.print;
+@endloop
