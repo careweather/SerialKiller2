@@ -88,6 +88,8 @@ OPTIONS:
   -r, --refs [refs]                 Reference Y axis lines. Use "," to separate multiple vals 
   -l, --limits [min,max]            Set the min and max values for the Y axis
   -t, --title [title]               Set the title of the plot
+  --xlabel [label]                  Set the label of the X axis
+  --ylabel [label]                  Set the label of the Y axis
 EXPORT OPTIONS: 
   --round [number]                  Round timestamps to the nearest [number] milliseconds
                                     Used for aligning data that was not recieved at the same time

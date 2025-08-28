@@ -147,6 +147,8 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
                     Option(("--header",)),
                     Option(("--time-fmt",)),
                     Option(("--popup",)), 
+                    Option(("--xlabel",)),
+                    Option(("--ylabel",)),
                 ],
             ),
             Command(
@@ -1535,10 +1537,19 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
             # self.lineEdit_refs.setText("")
 
         title = ""
+        x_label = ""
+        y_label = ""
         if "-t" in kwargs:
             if kwargs["-t"] is not None:
                 title = kwargs["-t"]
 
+        if "--xlabel" in kwargs:
+            if kwargs["--xlabel"] is not None:
+                x_label = kwargs["--xlabel"]
+
+        if "--ylabel" in kwargs:
+            if kwargs["--ylabel"] is not None:
+                y_label = kwargs["--ylabel"]
         plot_type = None
 
         a = list(args)
@@ -1582,7 +1593,7 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
 
         if plot_type is not None:
             self.comboBox_plot_type.setCurrentText(plot_type)
-            self.plot_start(title=title)
+            self.plot_start(title=title, x_label=x_label, y_label=y_label)
 
     def launch_plot_popup(self, item_str:str = None, **kwargs):
         print("launch plot popup", item_str, kwargs)
@@ -1668,7 +1679,7 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         self.terminal_add_text(f"Exported plot to {filepath}", type=TYPE_INFO_GREEN)
         self.set_debug_text(f"Exported plot", color=COLOR_GREEN)
 
-    def plot_start(self, junk=None, title=""):
+    def plot_start(self, junk=None, title="", x_label="", y_label=""):
         # if self.plot.type is not None:
         #     self.plot_reset()
 
@@ -1680,7 +1691,7 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         refs = self.lineEdit_refs.text()
         limits = self.lineEdit_limits.text()
 
-        self.plot.start(type=type, points=points, keys=keys, separators=separators, refs=refs, title=title, limits=limits)
+        self.plot.start(type=type, points=points, keys=keys, separators=separators, refs=refs, title=title, x_label=x_label, y_label=y_label, limits=limits)
         ## UI CHANGES
         self.pushButton_plot_start.setText("Pause")
         self.pushButton_plot_start.setStyleSheet(STYLESHEET_BUTTON_YELLOW)
