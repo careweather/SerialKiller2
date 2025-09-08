@@ -1,23 +1,13 @@
 # Script to output CSV magnetometer data in target format
 # Usage: Load this script in SerialKiller2 and run it
 # The script will output each line from mag_data.csv as target=HX,HY,HZ;
+# 
+# NOTE: This script now uses the pre-generated mag_data_sk_script.txt
+# To regenerate from CSV: python csv_to_sk_script.py <csv_file> scripts/mag_data_sk_script.txt
+
+ptime=250;
+@plot key-value --keys "HX,HY,HZ" --points 1000 --title 'Magnetometer Output Helmholtz Mag'
 
 @info=Starting CSV magnetometer data output
-@delay=100
-@args /home/cpaulmech/careweather/operations/Data_reading/parsed_data_files/mag_data.csv
-
-# Read CSV file once and store data
-@info=Reading CSV file...
-csv_data = open('$ARG0').readlines()[1:]  # Skip header
-@info=Found ${len(csv_data)} data lines
-
-# Output each line in target format
-@loop=${len(csv_data)}
-line = csv_data[$LOOP].strip().split(',')
-hx = round(float(line[1]), 1)
-hy = round(float(line[2]), 1) 
-hz = round(float(line[3]), 1)
-target=${hx},${hy},${hz};
-@endloop
-
-@info=Finished outputting CSV data
+@info=Loading pre-generated magnetometer data script...
+@script -o mag_data_sk_script.txt

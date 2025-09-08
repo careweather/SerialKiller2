@@ -1,0 +1,31 @@
+# Script to use CSV magnetometer reader extension
+# Usage: Load this script in SerialKiller2 and run it
+# This script demonstrates how to use the csv_mag_reader extension
+
+#ptime=250;
+#@plot key-value --keys "HX,HY,HZ" --points 1000 --title 'Magnetometer Output Helmholtz Mag'
+
+@info=Starting CSV magnetometer data output using extension
+@delay=100
+@args /home/cpaulmech/careweather/operations/Data_reading/parsed_data_files/mag_data.csv
+
+# Step 1: Load the CSV magnetometer reader extension
+@info=Loading CSV magnetometer reader extension...
+ext csv_mag_reader
+@wait=2000
+
+# Step 2: Load the CSV file (pass the file path as a command)
+@info=Loading CSV file: $ARG0
+ext --commands $ARG0
+@wait=2000
+
+# Step 3: Start sending magnetometer data
+@info=Starting magnetometer data transmission...
+ext --commands start
+@wait=10000
+
+# Step 4: Stop the extension (optional - it will stop automatically at end of data)
+@info=Stopping magnetometer data transmission...
+ext --commands stop
+
+@info=Finished CSV magnetometer data output

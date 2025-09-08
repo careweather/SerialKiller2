@@ -1,0 +1,28 @@
+# Script to output CSV magnetometer data in target format (Alternative Version)
+# Usage: Load this script in SerialKiller2 and run it
+# This version manually specifies magnetometer values instead of reading CSV
+# For CSV reading, use the csv_mag_reader extension
+
+ptime=250;
+@plot key-value --keys "HX,HY,HZ" --points 1000 --title 'Magnetometer Output Helmholtz Mag'
+
+@info=Starting magnetometer data output (manual values)
+@delay=100
+
+# Manual magnetometer data points (you can add more as needed)
+# Format: target=HX,HY,HZ;
+@info=Sending magnetometer calibration sequence...
+
+# Sample magnetometer values (replace with your actual data)
+target=-31.7,165.3,-356.8;
+target=-31.7,165.2,-356.8;
+target=-31.7,165.1,-356.9;
+target=-31.7,165.0,-356.9;
+target=-31.7,164.9,-357.0;
+target=-31.7,164.8,-357.0;
+target=-31.7,164.7,-357.1;
+target=-31.7,164.6,-357.1;
+target=-31.7,164.5,-357.2;
+target=-31.7,164.4,-357.2;
+
+@info=Finished magnetometer data output
