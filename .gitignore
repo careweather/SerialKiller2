@@ -2,7 +2,6 @@ __pycache__/
 extensions/__pycache__/
 logs/*
 !logs/example.txt
-extensions/*
 settings/*.json
 !settings/empty.json
 !scripts/example.txt

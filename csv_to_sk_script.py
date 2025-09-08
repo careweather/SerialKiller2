@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-CSV to SerialKiller2 Script Converter
+Mag Data CSV to SerialKiller2 Script Converter for use with the Helmholtz Chamber.
 Converts magnetometer CSV data into a SerialKiller2 script format
 """
 
@@ -16,6 +16,8 @@ def convert_csv_to_sk_script(csv_file_path, output_file_path=None):
         csv_file_path: Path to the input CSV file
         output_file_path: Path to the output script file (optional)
     """
+    # expand user path
+    csv_file_path = os.path.expanduser(csv_file_path)
     
     if not os.path.exists(csv_file_path):
         print(f"Error: CSV file not found: {csv_file_path}")
