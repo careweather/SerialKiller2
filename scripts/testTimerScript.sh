@@ -36,11 +36,13 @@ countdown 60 "Starting countdown to test..."
 # Play sound and announce test start
 paplay /usr/share/sounds/freedesktop/stereo/complete.oga && echo "Time is up, BeagleBone is booting!"
 
+# begin recording video and audio data to the ~/Videos/veery_tests directory
+ffmpeg -f v4l2 -framerate 30 -video_size 1280x720 -i /dev/video0 -f pulse -i alsa_input.usb-Arducam_Arducam_IMX179_8MP_Camera_YLAF20221208V0-02.analog-stereo -t 215 -c:v libx264 -c:a aac ~/Videos/veery_tests/$test_name.mp4 & 
+
+
 # Countdown for beaglebone booting (13 seconds)
 countdown 13 "Test about to start, beaglebone booting!"
 
-# begin recording video and audio data to the ~/Videos/veery_tests directory
-ffmpeg -f v4l2 -framerate 30 -video_size 1280x720 -i /dev/video0 -f pulse -i alsa_input.usb-Arducam_Arducam_IMX179_8MP_Camera_YLAF20221208V0-02.analog-stereo -t 210 -c:v libx264 -c:a aac ~/Videos/veery_tests/$test_name.mp4 & 
 
 # Play sound and announce test start
 paplay /usr/share/sounds/freedesktop/stereo/complete.oga && echo "Test has started!"
