@@ -37,7 +37,7 @@ countdown 60 "Starting countdown to test..."
 paplay /usr/share/sounds/freedesktop/stereo/complete.oga && echo "Time is up, BeagleBone is booting!"
 
 # begin recording video and audio data to the ~/Videos/veery_tests directory
-ffmpeg -f v4l2 -framerate 30 -video_size 1280x720 -i /dev/video0 -f pulse -i alsa_input.usb-Arducam_Arducam_IMX179_8MP_Camera_YLAF20221208V0-02.analog-stereo -t 215 -c:v libx264 -c:a aac ~/Videos/veery_tests/$test_name.mp4 & 
+ffmpeg -f v4l2 -framerate 30 -video_size 1280x720 -i /dev/video4 -f pulse -i alsa_input.usb-Arducam_Arducam_IMX179_8MP_Camera_YLAF20221208V0-02.analog-stereo -t 215 -c:v libx264 -c:a aac ~/Videos/veery_tests/$test_name.mp4 & 
 
 
 # Countdown for beaglebone booting (13 seconds)
@@ -57,7 +57,7 @@ paplay /usr/share/sounds/freedesktop/stereo/complete.oga && echo "Test has ended
 countdown 10 "Waiting for recording to finish..."
 
 # Now upload the video file to google drive via rclone
-rclone copy ~/Videos/veery_tests/$test_name.mp4 gdrive:Veery_adcs_tests/
+rclone -P copy ~/Videos/veery_tests/$test_name.mp4 gdrive:Veery_adcs_tests/
 
 # Print a message to the terminal that the video file has been uploaded
 echo "Video file has been uploaded to google drive"
