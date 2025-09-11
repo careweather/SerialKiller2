@@ -21,6 +21,12 @@ countdown() {
 countdown 60 "Starting countdown to test..."
 
 # Play sound and announce test start
+paplay /usr/share/sounds/freedesktop/stereo/complete.oga && echo "Time is up, BeagleBone is booting!"
+
+# Countdown for beaglebone booting (14 seconds)
+countdown 14 "Test about to start, beaglebone booting!"
+
+# Play sound and announce test start
 paplay /usr/share/sounds/freedesktop/stereo/complete.oga && echo "Test has started!"
 
 # Countdown to test end (200 seconds)
