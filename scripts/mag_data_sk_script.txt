@@ -1,9 +1,5 @@
 # Script generated from CSV magnetometer data
 # Usage: Load this script in SerialKiller2 and run it
-
-ptime=250;
-@plot key-value --keys "HX,HY,HZ" --points 1000 --title 'Magnetometer Output Helmholtz Mag'
-
 @info=Starting magnetometer data output (from CSV)
 @delay=100
 
