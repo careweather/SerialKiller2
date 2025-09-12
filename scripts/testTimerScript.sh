@@ -37,23 +37,17 @@ countdown 60 "Starting countdown to test..."
 paplay /usr/share/sounds/freedesktop/stereo/complete.oga && echo "Time is up, BeagleBone is booting!"
 
 # begin recording video and audio data to the ~/Videos/veery_tests directory
-ffmpeg -f v4l2 -input_format mjpeg -framerate 30 -video_size 1280x720 -i /dev/video4 -f pulse -i alsa_input.usb-Arducam_Arducam_IMX179_8MP_Camera_YLAF20221208V0-02.analog-stereo -t 215 -c:v libx264 -profile:v main -pix_fmt yuv420p -c:a aac -thread_queue_size 1024 ~/Videos/veery_tests/$test_name.mp4
+ffmpeg -y -f v4l2 -input_format mjpeg -framerate 30 -video_size 1280x720 -i /dev/video4 -f pulse -i alsa_input.usb-Arducam_Arducam_IMX179_8MP_Camera_YLAF20221208V0-02.analog-stereo -t 215 -c:v libx264 -profile:v main -pix_fmt yuv420p -c:a aac -thread_queue_size 1024 ~/Videos/veery_tests/$test_name.mp4 &
 
-# Countdown for beaglebone booting (13 seconds)
-countdown 13 "Test about to start, beaglebone booting!"
-
-
-# Play sound and announce test start
+# Wait 13 seconds silently, then play ding sound
+sleep 13
 paplay /usr/share/sounds/freedesktop/stereo/complete.oga && echo "Test has started!"
 
-# Countdown to test end (200 seconds)
-countdown 200 "Test in progress - countdown to end..."
+# Wait for the recording to finish (215 seconds total - 13 seconds already waited = 202 seconds)
+sleep 202
 
 # Play sound and announce test end
 paplay /usr/share/sounds/freedesktop/stereo/complete.oga && echo "Test has ended!"
-
-# The recording should have already ended, but may take another few seconds to finish, just wait for a few seconds to be sure
-countdown 10 "Waiting for recording to finish..."
 
 # Now upload the video file to google drive via rclone
 rclone -P copy ~/Videos/veery_tests/$test_name.mp4 gdrive:Veery_adcs_tests/
