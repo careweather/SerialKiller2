@@ -1,7 +1,8 @@
 @info=This script sets up satellite for indoor adcs testing
 @delay=500
 f.clr=bb_lock;f.clr=bb_run;f.clr=radar;
-f.wln="bb_run,a.upd=500;a.dur=200;a.fmt=70212;f.clr=adcs;g.log=adcs;bb.cmd=adcs -g false -q 0.2872,-0.3093,0.3263,0.8458 -T 200 -o /etc/telem.csv;";
+f.wln="bb_run,a.upd=500;a.dur=200;a.fmt=70212;f.clr=adcs;g.log=adcs;";
+f.wln="bb_run,bb.cmd=adcs -g false -q 0.2872,-0.3093,0.3263,0.8458 -T 200 -o /etc/telem.csv;";
 rw.cfg=1;bb.cfg=6;i.cfg=0;
 g.timeout=300;bb.timeout=500000;bb.maxon=1000000;
 f.wln="bb_run,bb.cmd=radar -b 4 -ch 8 && process -c 195";
