@@ -50,7 +50,7 @@ sleep 202
 paplay /usr/share/sounds/freedesktop/stereo/complete.oga && echo "Test has ended!"
 
 # Now upload the video file to google drive via rclone
-rclone -P copy ~/Videos/veery_tests/$test_name.mp4 gdrive:Veery_adcs_tests/
+rclone -P copy ~/Videos/veery_tests/${test_name}.mp4 gdrive:Veery_adcs_tests/
 
 # Print a message to the terminal that the video file has been uploaded
 echo "Video file has been uploaded to google drive"

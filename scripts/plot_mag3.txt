@@ -1,0 +1,7 @@
+@info=Starting Satellite Magnetometer testing
+@delay=500
+@exitcmd=testprint=0
+@plot key-value --keys "MAG3X,MAG3Y,MAG3Z" --points 1000 --title 'Magnetometer Output Satellite Magnetometers'
+@loop
+mag3.print;
+@endloop
