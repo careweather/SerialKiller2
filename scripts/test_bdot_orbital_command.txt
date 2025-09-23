@@ -1,0 +1,8 @@
+@info=This script will test the bdot orbital command
+@delay=500
+f.clr=adcs;a.fmt=98308;a.upd=10000;a.dur=6206;bdot.timcfg=100,2500,1,50,6206;
+a.status=1;m.save=a.fmt;
+m.save=a.upd;m.save=a.dur;
+m.save=bdot.timcfg;m.save=bdot.secrem;
+event=*,*,6206;f.cwln="event2,i.file=+adcs;a.status=0;m.save=a.status;reply+=BDOT:DONE;f.clr=event2;";
+wait=15000;bdot.en=1;

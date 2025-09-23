@@ -37,7 +37,9 @@ countdown 60 "Starting countdown to test..."
 paplay /usr/share/sounds/freedesktop/stereo/complete.oga && echo "Time is up, BeagleBone is booting!"
 
 # begin recording video and audio data to the ~/Videos/veery_tests directory
-ffmpeg -y -f v4l2 -input_format mjpeg -framerate 30 -video_size 1280x720 -i /dev/video4 -f pulse -i alsa_input.usb-Arducam_Arducam_IMX179_8MP_Camera_YLAF20221208V0-02.analog-stereo -t 215 -c:v libx264 -profile:v main -pix_fmt yuv420p -c:a aac -thread_queue_size 1024 ~/Videos/veery_tests/$test_name.mp4 &
+ffmpeg -y -thread_queue_size 1024 -f v4l2 -input_format mjpeg -framerate 30 -video_size 1280x720  \
+    -i /dev/video4 -f pulse -i alsa_input.usb-Arducam_Arducam_IMX179_8MP_Camera_YLAF20221208V0-02.analog-stereo -t 215 \
+    -c:v libx264 -profile:v main -pix_fmt yuv420p -c:a aac ${HOME}/Videos/veery_tests/${test_name}.mp4 &
 
 # Wait 13 seconds silently, then play ding sound
 sleep 13
