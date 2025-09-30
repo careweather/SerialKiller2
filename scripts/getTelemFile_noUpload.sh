@@ -10,16 +10,7 @@ output_file_name=$1
 echo "Getting telem file from the satellite and naming it: $output_file_name.csv"
 
 # Get the telem file from the satellite
-sshpass -p 'veery' ssh root@192.168.0.2 "cat /etc/telem.csv" > $output_file_name.csv
+sshpass -p 'veery' ssh root@192.168.0.2 "cat /etc/telem.csv" > ~/careweather/operations/Data_reading/raw_data_files/$output_file_name.csv
 
 # Print a message to the terminal that the telem file has been downloaded
-echo "Telem file has been downloaded to the current directory"
-
-# Now use rclone to send this file to google drive 
-rclone -P copy $output_file_name.csv gdrive:Veery_adcs_tests/
-
-# Print a message to the terminal that the telem file has been uploaded to google drive
-echo "Telem file has been uploaded to google drive"
-
-# Print a message to the terminal that the script has completed
-echo "Script has completed"
+echo "Telem file has been saved to the ~/careweather/operations/Data_reading/raw_data_files directory "
