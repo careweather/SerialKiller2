@@ -1,0 +1,7 @@
+@info=Starting Satellite Magnetometer testing
+@delay=500
+@exitcmd=testprint=0
+@plot key-value --keys "XP,XN,YP,YN,ZP,ZN" --points 1000 --title 'Plot CSS'
+@loop
+css6
+@endloop
