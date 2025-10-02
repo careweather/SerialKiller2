@@ -1,0 +1,15 @@
+@info=This script will replace the lost init file for Veery 0.5-rc0D specifically! Based on the test results in the notion 0.x Build and test results.
+@delay=500
+f.clr=init;
+f.wln="init,$imu.offset=0.5323,-0.2985,-0.5475";
+f.wln="init,$imu.sd=0.0705,0.0774,0.0696";
+f.wln="init,$gyroDEP.offset=8.2810,-18.4726,-286.6861";
+f.wln="init,$gyroDEP.sd=0.8383,0.7140,0.0011";
+f.wln="init,$mag.offset=-197.33,446.18,-163.48;";
+f.wln="init,$mag.mult=1.00625,0.00928,-0.07267,0.00928,1.08883,-0.03377,-0.07267,-0.03377,0.91904;";
+f.wln="init,$mag2.offset=632.50,-162.41,-124.62;";
+f.wln="init,$mag2.mult=1.01900,-0.01020,-0.02850,-0.01020,1.00768,-0.07776,-0.02850,-0.07776,0.98082;";
+f.wln="init,$mag3.offset=-89.14,-175.01,491.09;";
+f.wln="init,$mag3.mult=0.98558,0.03078,0.08188,0.03078,1.04019,-0.02900,0.08188,-0.02900,0.98409;";
+f.wln="init,$bdot.steer=1,0,0,0,1,0,0,0,-1;";
+f.wln="init,rw.mult=1,1,1;";
