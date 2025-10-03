@@ -1,0 +1,7 @@
+@info=Starting Satellite Magnetometer testing
+@delay=100
+@exitcmd=testprint=0
+@plot key-value --keys "GYROX,GYROY,GYROZ" --points 1000 --title 'Magnetometer Output Satellite Magnetometers'
+@loop
+imuDEP;
+@endloop

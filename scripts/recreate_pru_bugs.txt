@@ -1,7 +1,7 @@
 @info=Radar Communications commands For debugging!
-rw.cfg=0;bb.cfg=2;bb.timeout=600000;bb.maxon=1000000;
-f.cwr="bb_run,bb.cmd=adcs -T 105 -o /etc/telem.csv -f 582 --sigma-sun .05 --sigma-mag .05";
-f.wln="bb_run, -k .78 -p 3. -P .29 -H true -C .25 -t 1754706720 -q .2872,-.3093,.3263,.8458 -D 4000";
+g.begin=1;rw.cfg=0;bb.cfg=3;
+f.cwr="bb_lock,bb.cmd=adcs -T 62 -o /etc/telem.csv -f 582 --sigma-sun .05 --sigma-mag .05";
+f.wln="bb_lock, -k .78 -p 3. -P .29 -H true -C .25 -t 1754706720 -q .2872,-.3093,.3263,.8458 -D 4000";
 f.cwr="passexec,bb.cmd=radar-coms --bitrate 50000 --bandwidth 400000 -f ~/radar/balloon.txt;"
 f.wln="passexec,bb.cmd=radar-coms --bitrate 50000 --bandwidth 400000 -f ~/radar/processing.py;bb.end;";
 passtimes=100,200,300,400,500,600,700,800,900;m.save=passtimes;
