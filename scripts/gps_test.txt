@@ -1,0 +1,4 @@
+@info=GPS Testing for veery v0.4, see which part breaks m.save
+@delay=1000
+
+g.fmt=14;g.timeout=300;g.dur=56400;g.upd=180;f.clr=gps;g.begin;m.save=g.fmt;m.save=g.timeout;m.save=g.dur;event=57000;tlow=-25;m.save=tlow;f.clr=event0;f.wln="event0,i.file=gps;f.clr=event0;";f.wln="init,$g.upd=180;";
