@@ -8,6 +8,7 @@ from SK_help import *
 import random 
 import pygit2
 import datetime
+import re 
 
 
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
@@ -450,6 +451,25 @@ def plot_elements_to_str(elements:dict) -> str:
             rstr = rstr[:-1] + "}"
         rstr += ","
     return rstr[:-1]
+
+
+def evaluate_line(text:str) -> str:
+    found_expressions = re.findall(r"\$\{(.*?)\}", text)
+    for expression in found_expressions:
+        try:
+            if not expression:
+                text = text.replace("${}", "")
+                continue
+            expression_resp = str(eval(expression))
+            text = text.replace(f"${{{expression}}}", expression_resp, 1)
+            vprint(f"EXPRESSION ${{{expression}}} = {expression_resp}", color="green")
+        except Exception as E:
+            eprint(E)
+            error_str = f"ERR IN EXPR: ${{{expression}}} {str(E)}"
+            #self.terminal_add_text(f"ERR IN EXPR: ${{{expression}}} {str(E)}", type=TYPE_ERROR)
+            return "", error_str
+        
+    return text, None
 
 
 

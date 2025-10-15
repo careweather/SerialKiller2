@@ -94,6 +94,7 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         self.label_status_bar.setSizePolicy(QtWidgets.QSizePolicy.Policy.MinimumExpanding, QtWidgets.QSizePolicy.Policy.Expanding)
         #self.label_status_bar.setWordWrap(True)
         self.label_status_bar.setTextFormat(QtCore.Qt.TextFormat.PlainText)
+        self.label_status_bar.setFont(QtGui.QFont("Monospace", 8))
 
         self.statusBar().addWidget(self.label_status_bar)
         self.connect_ui()
@@ -146,6 +147,8 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
                     Option(("--header",)),
                     Option(("--time-fmt",)),
                     Option(("--popup",)), 
+                    Option(("--xlabel",)),
+                    Option(("--ylabel",)),
                 ],
             ),
             Command(
@@ -156,7 +159,9 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
                     Option(("-o", "--open", "open")),
                     Option(("-s", "--save", "save")),
                     Option(("-n", "--new", "new")),
-                    Option(("-ls", "list")),
+                    Option(("-ls", "--list")),
+                    Option(("on", "--on")),
+                    Option(("off", "--off")),
                     Option(("--line-fmt",)),
                     Option(("--time-fmt",)),
                 ],
@@ -199,6 +204,7 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
                     Option(("-ls", "--list")),
                     Option(("-h", "--help")),
                     Option(("--clear", "clear")),
+                    Option(("--save", "-s"), type=str, default=None),
                 ],
             ),
             Command(
@@ -240,6 +246,8 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         self.lineEdit_send.setFocus()
         self.log_config_changed()
 
+        
+
         if open_commands:
             while open_commands:
                 open_command = open_commands.pop(0)
@@ -252,11 +260,15 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         self.wrap_text_toggled()
         self.extension_debug_level_changed(0)
         self.init_time = time.time()
+        # self.statusBar().setFont(QtGui.QFont("Monospace"))
+        # print(self.statusBar().font().family())
 
         self.update_status_bar()
         # time.sleep(0.2)
         self.pushButton_save_as_script.setStyleSheet(STYLESHEET_BUTTON_DEFAULT)
         self.textEdit_script.textChanged.connect(self.script_edited)
+
+
         #####################################################################################
         self.init_done = True  ## THIS MUST BE THE LAST LINE OF __INIT__ ###
         #####################################################################################
@@ -266,6 +278,7 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         self.terminal.setPlaceholderText(TERMINAL_PLACEHOLDER)
 
         self.textEdit_script.setTabStopDistance(20)
+        # self.textEdit_script.
         self.tableWidget_expressions.itemChanged.connect(self.user_expressions_edited)
         self.tableWidget_keys.itemChanged.connect(self.key_commands_edited)
         self.tableWidget_expressions.horizontalHeader().setStretchLastSection(True)
@@ -969,6 +982,12 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         if "-h" in kwargs:
             self.terminal_add_text(LOG_HELP, type=TYPE_INFO)
             return
+        
+        if "on" in kwargs:
+            self.checkBox_auto_log.setChecked(True)
+
+        if "off" in kwargs:
+            self.checkBox_auto_log.setChecked(False)
 
         if "--line-fmt" in kwargs and kwargs["--line-fmt"]:
             self.lineEdit_log_line_format.setText(kwargs["--line-fmt"])
@@ -1518,10 +1537,19 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
             # self.lineEdit_refs.setText("")
 
         title = ""
+        x_label = ""
+        y_label = ""
         if "-t" in kwargs:
             if kwargs["-t"] is not None:
                 title = kwargs["-t"]
 
+        if "--xlabel" in kwargs:
+            if kwargs["--xlabel"] is not None:
+                x_label = kwargs["--xlabel"]
+
+        if "--ylabel" in kwargs:
+            if kwargs["--ylabel"] is not None:
+                y_label = kwargs["--ylabel"]
         plot_type = None
 
         a = list(args)
@@ -1565,7 +1593,7 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
 
         if plot_type is not None:
             self.comboBox_plot_type.setCurrentText(plot_type)
-            self.plot_start(title=title)
+            self.plot_start(title=title, x_label=x_label, y_label=y_label)
 
     def launch_plot_popup(self, item_str:str = None, **kwargs):
         print("launch plot popup", item_str, kwargs)
@@ -1651,7 +1679,7 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         self.terminal_add_text(f"Exported plot to {filepath}", type=TYPE_INFO_GREEN)
         self.set_debug_text(f"Exported plot", color=COLOR_GREEN)
 
-    def plot_start(self, junk=None, title=""):
+    def plot_start(self, junk=None, title="", x_label="", y_label=""):
         # if self.plot.type is not None:
         #     self.plot_reset()
 
@@ -1663,7 +1691,7 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         refs = self.lineEdit_refs.text()
         limits = self.lineEdit_limits.text()
 
-        self.plot.start(type=type, points=points, keys=keys, separators=separators, refs=refs, title=title, limits=limits)
+        self.plot.start(type=type, points=points, keys=keys, separators=separators, refs=refs, title=title, x_label=x_label, y_label=y_label, limits=limits)
         ## UI CHANGES
         self.pushButton_plot_start.setText("Pause")
         self.pushButton_plot_start.setStyleSheet(STYLESHEET_BUTTON_YELLOW)
@@ -2138,25 +2166,30 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
             self.terminal_add_text(KEY_COMMAND_HELP, TYPE_INFO)
             self.tabWidget.setCurrentIndex(0)
             return
-        if "-ls" in kwargs:
+        elif "-ls" in kwargs:
             t = pretty_format_dict(self.current_settings["key_commands"])
             self.terminal_add_text(t, TYPE_INFO)
             self.tabWidget.setCurrentIndex(0)
             return
-        if "--clear" in kwargs:
+        elif "--clear" in kwargs:
             self.tableWidget_keys.setRowCount(0)
             self.tableWidget_keys.setRowCount(1)
             self.key_commands_edited()
+            return
+        elif "--save" in kwargs: 
+            self.key_export_script(kwargs["--save"])
             return
 
         if len(args) == 2:
             self.add_key_command(args[0], args[1])
 
-    def key_export_script(self):
-        filepath = self.get_save_file_popup(self.lineEdit_script_dir.text(), extensions="*.txt", title = "Export Key Commands")
+    def key_export_script(self, filepath: str = None):
         if not filepath:
-            return
+            filepath = self.get_save_file_popup(self.lineEdit_script_dir.text(), extensions="*.txt", title = "Export Key Commands")
+            if not filepath:
+                return
         
+        filepath = clean_filepath(filepath, default_path=self.lineEdit_script_dir.text(), extensions=".txt")
         dprint(f"Exporting Key Commands to {filepath}", color = "green")
         vprint(self.current_settings["key_commands"], color="green")
     

@@ -137,7 +137,6 @@ class TerminalWidget(QtWidgets.QPlainTextEdit):
         self.fmt.clearProperty(QtGui.QTextFormat.Property.FontItalic)
         self.fmt.clearProperty(QtGui.QTextFormat.Property.FontUnderline)
         self.fmt.clearProperty(QtGui.QTextFormat.Property.FontStrikeOut)
-        #self.setCurrentCharFormat(self.fmt)
 
     def put_chars(self, data: bytes):
         start_t = time.perf_counter_ns() 
@@ -145,7 +144,10 @@ class TerminalWidget(QtWidgets.QPlainTextEdit):
         if not self.auto_scroll:
             prev_bar_position = self.verticalScrollBar().value()
         if not self.textCursor().atEnd():
-            self.textCursor().movePosition(QtGui.QTextCursor.MoveOperation.End)
+            cursor = self.textCursor()
+            now_pos = cursor.position()
+            cursor.movePosition(QtGui.QTextCursor.MoveOperation.End)
+            self.setTextCursor(cursor)
         mct = time.perf_counter_ns() - start_t
         insert_text_time = 0 
         escape_seq_time = 0 

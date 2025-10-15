@@ -84,6 +84,21 @@ class CollapsingGroupBox(QtWidgets.QGroupBox):
         # print(f"checked {checked} \n contents rect {self.contentsRect().height()} {self.contentsRect().x()} {self.contentsRect().y()} {self.contentsRect().}")
 
 
+class ScriptTextEdit(QtWidgets.QTextEdit):
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.setTabStopDistance(20)
+        # print("ScriptTextEdit init", args, kwargs)
+
+    def insertFromMimeData(self, source: QtCore.QMimeData):
+        #print("insertFromMimeData", source)
+        if source.hasText():
+            self.insertPlainText(source.text())
+        else:
+            super().insertFromMimeData(source)
+        
+
+    
 class ColorComboBox(QtWidgets.QComboBox):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
@@ -95,6 +110,9 @@ def event_to_string(event: QtGui.QKeyEvent):
     nativeVirtualKey: <{event.nativeVirtualKey()}> isAutoRepeat: <{event.isAutoRepeat()}> count: <{event.count()}> \
     type: <{event.type()}>"""
     return s
+
+
+
 
 
 class CaptureLineEdit(QtWidgets.QLineEdit):

@@ -39,7 +39,7 @@ class PlotWidget(pg.GraphicsLayoutWidget):
         pass 
 
 
-    def start(self, type:str = "Key-Value", points: int = 100, keys:list = [], separators:str = " :;=,", refs:list = [], title:str = "", limits:list = []):
+    def start(self, type:str = "Key-Value", points: int = 100, keys:list = [], separators:str = " :;=,", refs:list = [], title:str = "", x_label:str = "", y_label:str = "", limits:list = []):
         if self.type is not None:
             self.reset()
         self.type = type
@@ -92,11 +92,17 @@ class PlotWidget(pg.GraphicsLayoutWidget):
         elif isinstance(refs, list):
             ref_lines = refs
 
-        dprint(f"Starting plot. Type: {self.type}, Points: {self.points}, Keys: {self.keys} Refs: {ref_lines} Limits: {self.limits}", color = "green")
+        dprint(f"Starting plot. Type: {self.type}, Points: {self.points}, Keys: {self.keys} Refs: {ref_lines} Limits: {self.limits} X-Label: {x_label} Y-Label: {y_label}", color = "green")
 
-        self.plot = pg.PlotItem()
+        self.plot:pg.PlotItem = pg.PlotItem()
         self.addItem(self.plot)
-        self.plot.setTitle(title)
+
+        if title:
+            self.plot.setTitle(title)
+        if y_label:
+            self.plot.setLabel("left", y_label)
+        if x_label:
+            self.plot.setLabel("bottom", x_label)
 
         for line in ref_lines:
             self.plot.addLine(y=line, pen = pg.mkPen(style = QtCore.Qt.PenStyle.DashLine))
