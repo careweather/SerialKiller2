@@ -3,7 +3,6 @@
 @plot key-value --keys "HX,HY,HZ" --points 1000 --title 'Magnetometer Output Helmholtz Mag'
 ptime=100;
 @delay=10000
-@exitcmd=testprint=0
 @loop
 target=0,0,0
 target=1000,0,0

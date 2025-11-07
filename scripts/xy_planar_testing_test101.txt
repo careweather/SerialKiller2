@@ -1,0 +1,9 @@
+@info=This script sets up the satellite for indoor planar testing! 10 target quaternions.
+@delay=500
+f.cwln="bb_run,a.upd=500;a.dur=200;a.fmt=4678;f.clr=adcs;";
+f.wr="bb_run,bb.cmd=adcs -q=0.4218,-0.0156,-0.3673,0.8287 -T 200 -o /etc/telem.csv -f 582 ";
+f.wr="bb_run,--sigma-sun 0.05 --sigma-mag 0.05 -k 0.78 -p 3.0 -P 0.29 -H true -C 0.1 -D 4000 -t 1754706720";
+f.wln="bb_run, -g false";
+f.clr=radar;rw.cfg=49;bb.cfg=2;i.cfg=0;
+bb.timeout=500000;bb.maxon=1000000;
+f.wln="bb_run,bb.cmd=radar -b 4 -ch 8 && process -c 195";
