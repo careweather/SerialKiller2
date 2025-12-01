@@ -79,9 +79,18 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
 
     key_popup: KeyPopup = None
 
-    def __init__(self, *args, open_commands=[], **kwargs):
+    def __init__(self, *args, open_commands=[], force_dark=False, **kwargs):
         super().__init__(*args, **kwargs)
         self.setupUi(self)
+        
+        # By default, follow system theme. Only keep the dark palette if force_dark is set.
+        if not force_dark:
+            self.setPalette(QtWidgets.QApplication.instance().style().standardPalette())
+            # Set light gray backgrounds on terminal and script editor to differentiate them
+            self.terminal.setStyleSheet("background-color: rgb(230, 230, 230);")
+            self.textEdit_script.setStyleSheet("background-color: rgb(240, 240, 240); color: rgb(0, 0, 0);")
+            self.statusbar.setStyleSheet("")
+        
         setComboBox_items(self.comboBox_baud, serial.Serial.BAUDRATES)
         setComboBox_items(self.comboBox_parity, PARITIES)
         self.save_timer = QtCore.QTimer()
@@ -2526,7 +2535,7 @@ def getComboBox_items(comboBox: QtWidgets.QComboBox) -> list[str]:
     return [comboBox.itemText(i) for i in range(comboBox.count())]
 
 
-def run_app(size_x=700, size_y=700, open_commands=""):
+def run_app(size_x=700, size_y=700, open_commands="", force_dark=False):
     global app
     app = QtWidgets.QApplication(sys.argv)
     app_icon = QtGui.QIcon()
@@ -2536,7 +2545,7 @@ def run_app(size_x=700, size_y=700, open_commands=""):
     app.setStyle(style)
     if DEBUG_LEVEL > 0:
         cprint(GREETINGS_TEXT, color="green")
-    window = MainWindow(open_commands=open_commands)
+    window = MainWindow(open_commands=open_commands, force_dark=force_dark)
     window.setWindowIcon(app_icon)
     window.resize(size_x, size_y)
     window.show()

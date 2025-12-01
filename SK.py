@@ -45,6 +45,7 @@ OPTIONS:
     -u, --update                        Update UI files
     --update-debug                      Update UI files in debug mode
     --reset                             Reset to default settings
+    --dark                              Force dark mode (ignore system theme)
 """ 
 
 def run():
@@ -52,6 +53,7 @@ def run():
     open_commands = []
     x_size = 700
     y_size = 800
+    force_dark = False
     has_open_cmds = False 
     while input_args:
         arg = input_args.pop(0)
@@ -89,6 +91,9 @@ def run():
             y_size = int(input_args.pop(0))
         elif arg in ['-c', '--commands']:
             has_open_cmds = True 
+        elif arg in ['--dark']:
+            force_dark = True
+            termcolor.cprint("Forcing dark mode", color="cyan")
         elif arg in ['--reset']:
             print("Reverting to default settings")
             from SK_common import DEFAULT_SETTINGS_FILE, DEFAULT_SCRIPT_PATH, DEFAULT_LOG_PATH, DEFAULT_EXTENSION_PATH, DEFAULT_RESOURCES_PATH, DEFAULT_SETTINGS_PATH
@@ -118,7 +123,7 @@ def run():
             exit(0)
     
     import SK_main_window
-    SK_main_window.run_app(x_size, y_size, open_commands)
+    SK_main_window.run_app(x_size, y_size, open_commands, force_dark=force_dark)
 
 if __name__ == "__main__":
     run()

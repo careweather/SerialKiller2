@@ -140,7 +140,7 @@ def find_expressions(line: str) -> list[tuple[int, int]]:
 
 class ScriptSyntaxHighlighter(QSyntaxHighlighter):
     cmd_format = QTextCharFormat()
-    cmd_format.setForeground(COLOR_LIGHT_YELLOW)
+    cmd_format.setForeground(COLOR_DARK_YELLOW)
 
     comment_format = QTextCharFormat()
     comment_format.setForeground(COLOR_GREY)
