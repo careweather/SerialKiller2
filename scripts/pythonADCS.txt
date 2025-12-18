@@ -1,5 +1,0 @@
-@info=this script will run the adcs code on the beaglebone
-@delay=100
-g.begin=1;f.clr=bb_lock;
-bb.cfg=1;bb.timeout=100000;bb.maxon=100000;
-f.cwln="bb_run,bb.cmd=python3 simulations/Trimmed_BeagleBoneTest.py";
