@@ -1,0 +1,2 @@
+@info=This script runs the adcs code on the beaglebone
+bb.cfg=4096;f.cwln="bb_run,bb.cmd=cd simulations && python3 Scenario7_BeagleBoneTest.py";
