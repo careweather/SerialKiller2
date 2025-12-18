@@ -1,0 +1,5 @@
+# Commands to test the normal adcs
+@info=this script will run the normal rust adcs code:
+@delay=100
+bb.cfg=1;bb.timeout=100000;bb.maxon=100000;
+f.cwln="bb_run,bb.cmd=adcs -T 5 -o /etc/telem.csv -f 582 --sigma-sun .05 --sigma-mag .05 -k .78 -p 3. -P .29 -H true -C .0 -S .0 -D 4096"
