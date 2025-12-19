@@ -2,5 +2,5 @@
 @delay=100
 f.clr=bb_lock;
 bb.cfg=2;bb.timeout=100000;bb.maxon=100000;
-f.cwln="bb_run,a.upd=500;a.dur=200;a.fmt=4678;f.clr=adcs;wait=8000;bb.cmd=python3 simulations/Trimmed_BeagleBoneTest.py";
+f.cwln="bb_run,a.upd=500;a.dur=200;a.fmt=4678;f.clr=adcs;wait=8000;bb.cmd=python3 simulations/Trimmed_cpp_BeagleBoneTest.py";
 f.clr=radar;rw.cfg=0;i.cfg=0;

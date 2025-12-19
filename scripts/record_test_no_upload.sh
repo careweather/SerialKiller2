@@ -50,4 +50,4 @@ kill -INT "$ffmpeg_pid" 2>/dev/null
 wait "$ffmpeg_pid" 2>/dev/null
 
 # Play sound and announce test end
-paplay /usr/share/sounds/freedesktop/stereo/complete.oga && echo "Test has ended!"
+paplay /usr/share/sounds/freedesktop/stereo/complete.oga && echo "Test has ended!".
