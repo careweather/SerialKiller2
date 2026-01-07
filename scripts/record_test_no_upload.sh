@@ -25,7 +25,7 @@ paplay /usr/share/sounds/freedesktop/stereo/complete.oga && echo "Test has start
 
 # Start ffmpeg without a fixed duration; run in background
 ffmpeg -y -thread_queue_size 1024 \
-    -f v4l2 -input_format mjpeg -framerate 30 -video_size 1280x720 -thread_queue_size 1024 -i /dev/video4 \
+    -f v4l2 -input_format mjpeg -framerate 30 -video_size 1280x720 -thread_queue_size 1024 -i /dev/video2 \
     -f pulse -i alsa_input.usb-Arducam_Arducam_IMX179_8MP_Camera_YLAF20221208V0-02.analog-stereo \
     -c:v libx264 -profile:v main -pix_fmt yuv420p -c:a aac \
     "$HOME/Videos/veery_tests/${test_name}.mp4" &
