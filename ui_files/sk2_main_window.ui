@@ -2398,7 +2398,7 @@ p, li { white-space: pre-wrap; }
                   <string/>
                  </property>
                  <property name="text">
-                  <string>400</string>
+                  <string>5000</string>
                  </property>
                 </widget>
                </item>

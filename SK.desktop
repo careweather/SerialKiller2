@@ -2,7 +2,7 @@
 Version=1.0
 Name=Serial-Killer2
 Comment=Serial Interface program
-Exec=/home/chris/careweather/SerialKiller2/.venv/bin/python /home/chris/careweather/SerialKiller2/SK.py -x 600 -y 700
+Exec=env DRI_PRIME=1 /home/chris/careweather/SerialKiller2/.venv/bin/python /home/chris/careweather/SerialKiller2/SK.py -x 600 -y 700
 Path=/home/chris/careweather/SerialKiller2
 Icon=/home/chris/careweather/SerialKiller2/img/SK_Icon.png
 Terminal=false
