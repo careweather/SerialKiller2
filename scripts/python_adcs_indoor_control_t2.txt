@@ -1,6 +1,8 @@
 @info=this script will run the adcs code on the beaglebone
 @delay=100
 f.clr=bb_lock;
-bb.cfg=2;bb.timeout=100000;bb.maxon=100000;
-f.cwln="bb_run,a.upd=500;a.dur=200;a.fmt=4678;f.clr=adcs;wait=8000;bb.cmd=python3 simulations/Trimmed_cpp_BeagleBoneTest.py";
+f.cwln="bb_run,a.upd=500;a.dur=200;a.fmt=4678;f.clr=adcs;wait=8000;";
+f.wr="bb_run,bb.cmd=python3 simulations/Trimmed_cpp_BeagleBoneTest.py -T 250 -q=0.1154,-0.4060,0.6747,0.6054";
+f.wr="bb_run, -t 1754706720 -g False -H True -C 0.1 -D 4000 -P 0.29"
 f.clr=radar;rw.cfg=43;i.cfg=0;
+bb.cfg=2;bb.timeout=100000;bb.maxon=100000;
