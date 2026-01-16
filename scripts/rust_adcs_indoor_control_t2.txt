@@ -10,4 +10,4 @@ f.wr="bb_run,--sigma-sun 0.05 --sigma-mag 0.05 -k 0.78 -p 3.0 -P 0.29 -H true -C
 f.wln="bb_run, -g false";
 f.clr=radar;rw.cfg=43;bb.cfg=2;i.cfg=0;
 bb.timeout=500000;bb.maxon=1000000;
-f.wln="bb_end,event=0;";
+f.cwln="bb_end,event=0,0;";
