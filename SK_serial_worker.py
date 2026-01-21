@@ -82,8 +82,6 @@ class SerialWorker(QObject):
                     end_t = time.perf_counter()
                     if DEBUG_LEVEL & 128:
                         cprint(f"Serial Read Time: {(end_t - self.last_activity) * 1000000:.3f}us Size: {in_waiting}", color="blue")
-                    # Small sleep to reduce CPU usage
-                    time.sleep(0.001)
                 elif (time.perf_counter() - self.last_activity) > 1.00:
                     time.sleep(0.02)
                 # No else clause - poll as fast as possible when recently active
@@ -194,7 +192,7 @@ def get_ports(aliases: dict = None) -> dict:
 class RescanWorker(QObject):
     new_ports = pyqtSignal(list)
     active = False
-    update_interval = 5000  # 5 seconds - reduce USB bus scanning with multiple instances
+    update_interval = 400 
     existing_ports = []
 
     aliases = None 
