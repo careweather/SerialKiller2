@@ -31,6 +31,19 @@ class TerminalWidget(QtWidgets.QPlainTextEdit):
         )
         self.fmt = self.currentCharFormat()
         
+    def wheelEvent(self, event:QtGui.QWheelEvent):
+        # Enable horizontal scrolling with Shift+Wheel
+        if event.modifiers() == QtCore.Qt.KeyboardModifier.ShiftModifier:
+            # Get the horizontal scrollbar
+            scrollbar = self.horizontalScrollBar()
+            # Get the scroll delta (positive = scroll right, negative = scroll left)
+            delta = event.angleDelta().y()
+            # Move the scrollbar by the delta amount
+            scrollbar.setValue(scrollbar.value() - delta)
+            event.accept()
+        else:
+            # Default vertical scrolling behavior
+            super().wheelEvent(event)
 
     def keyPressEvent(self, event:QtGui.QKeyEvent):
         #print(f"{event.key()} {type(event.key())}\n\t{event.text()} {type(event.text())}\n\t{event.modifiers()} {type(event.modifiers())}\n\t{event.nativeVirtualKey()} {type(event.nativeVirtualKey())}")
