@@ -20,7 +20,7 @@ TEST_MODES = {
     "leo":      ("leo_sphere_points.txt",   "LEO Residual Test (200 points, 300-600mG)"),
     "leo-quick":("leo_specific_tests.txt",  "LEO Quick Test (21 key vectors)"),
 }
-DEFAULT_MODE = "cal"
+DEFAULT_MODE = "leo"
 
 '''
 This is a template for creating a custom extension for interacting with a serial device. 
@@ -82,6 +82,10 @@ class Extension(SK_Extension):
     serial_number = "sn-unknown"
     test_mode = DEFAULT_MODE
     sphere_points_file = None
+    
+    # Settling time (ms) to wait after DONE before reading magnetometers
+    # This allows the magnetic field and magnetometer readings to stabilize
+    SETTLE_TIME_MS = 500  # Adjust this value as needed (try 200-1000ms)
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
@@ -111,16 +115,29 @@ class Extension(SK_Extension):
             lines = self.socket.recv(1024).decode("utf-8").split("\n")
             for line in lines:
                 if line:
+                    # Debug: show all received lines
+                    self.debug(f'[RECV] "{line}"', type = TYPE_INFO_MAGENTA)
+                    
                     if line.startswith("sn="):
                         self.serial_number = line.split("=")[1].replace(";", "")
                     elif line.startswith("MAGX:"):
-                        self.debug(f'[{self.sphere_point_index}]', line, type = TYPE_INFO)
-                        self.sphere_point_index += 1
-                        if self.sphere_point_index >= len(self.sphere_points):
-                            self.sphere_point_index = 0
-                            self.end() 
-                        else: 
-                            self.send(f'target={self.sphere_points[self.sphere_point_index]}')
+                        # Log MAG1 reading (one line: MAGX: ... MAGY: ... MAGZ: ...)
+                        self.debug(f'[{self.sphere_point_index}] MAG1: {line}', type = TYPE_INFO)
+                        # For calibration mode (mags.raw), MAG1 output triggers advancement
+                        # since all 3 mags are output together in a different format
+                        if self.test_mode == 'cal':
+                            self._advance_to_next_point()
+                    elif line.startswith("MAG2X:"):
+                        # Log MAG2 reading for debugging
+                        self.debug(f'[{self.sphere_point_index}] MAG2: {line}', type = TYPE_INFO)
+                    elif line.startswith("MAG3X:"):
+                        # For leo/leo-quick modes: MAG3X line is the last magnetometer
+                        # Format: MAG3X: ... MAG3Y: ... MAG3Z: ... (all on one line)
+                        # Now all 3 magnetometers have been recorded, safe to advance
+                        self.debug(f'[{self.sphere_point_index}] MAG3: {line}', type = TYPE_INFO)
+                        self.debug(f'[{self.sphere_point_index}] All mags recorded, advancing to next point', type = TYPE_INFO)
+                        if self.test_mode != 'cal':
+                            self._advance_to_next_point()
                 
         except socket.error as e:
             # No data available (EAGAIN/EWOULDBLOCK) or connection closed
@@ -141,12 +158,30 @@ class Extension(SK_Extension):
         ext mag-chamber leo       - LEO residual test (200 points)
         ext mag-chamber leo-quick - LEO quick test (21 key vectors)
         ext mag-chamber help      - Show available modes
+        
+    Options (can be combined with mode):
+        ext mag-chamber leo settle=1000  - Set settling time to 1000ms
     '''
     def event_start(self, *args):
-        # Parse mode argument
-        if args:
-            mode_arg = args[0].lower().strip()
+        # Parse arguments
+        mode_arg = None
+        for arg in args:
+            arg = arg.strip()
             
+            # Check for settle time option
+            if arg.lower().startswith("settle="):
+                try:
+                    self.SETTLE_TIME_MS = int(arg.split("=")[1])
+                    self.debug(f"Settling time set to {self.SETTLE_TIME_MS}ms", type=TYPE_INFO)
+                except ValueError:
+                    self.debug(f"Invalid settle time: {arg}", type=TYPE_ERROR)
+                continue
+            
+            # First non-option arg is the mode
+            if mode_arg is None:
+                mode_arg = arg.lower()
+        
+        if mode_arg:
             # Handle help command
             if mode_arg in ["help", "-h", "--help", "?"]:
                 self.debug("=" * 50, type=TYPE_INFO)
@@ -155,8 +190,11 @@ class Extension(SK_Extension):
                 for mode, (filename, description) in TEST_MODES.items():
                     self.debug(f"  {mode:<12} - {description}", type=TYPE_INFO)
                 self.debug("", type=TYPE_INFO)
-                self.debug("Usage: ext mag-chamber [mode]", type=TYPE_INFO)
+                self.debug("Usage: ext mag-chamber [mode] [options]", type=TYPE_INFO)
                 self.debug("Example: ext mag-chamber leo-quick", type=TYPE_INFO)
+                self.debug("", type=TYPE_INFO)
+                self.debug("Options:", type=TYPE_INFO)
+                self.debug(f"  settle=N     - Settling time in ms (default: {self.SETTLE_TIME_MS})", type=TYPE_INFO)
                 self.debug("=" * 50, type=TYPE_INFO)
                 self.end()
                 return
@@ -235,12 +273,31 @@ class Extension(SK_Extension):
     def event_serial_disconnected(self):
         return 
 
+    def _request_mag_readings(self):
+        """Called after settling delay to request magnetometer readings"""
+        if self.killed:
+            return
+        if self.test_mode == 'cal':
+            self.send_to_server(f"mags.raw")
+        elif self.test_mode == 'leo' or self.test_mode == 'leo-quick':
+            self.send_to_server(f"mag.print;mag2.print;mag3.print;")
+
+    def _advance_to_next_point(self):
+        """Advance to the next sphere point after all magnetometer readings are recorded"""
+        self.sphere_point_index += 1
+        if self.sphere_point_index >= len(self.sphere_points):
+            self.sphere_point_index = 0
+            self.end() 
+        else: 
+            self.send(f'target={self.sphere_points[self.sphere_point_index]}')
+
     '''User-Defined event for when the extension recieves lines from the serial device'''
     def event_receive_lines(self, lines:list[str]):
         for line in lines:
             if line.startswith("DONE: "):
-                self.send_to_server(f"mags.raw")
-                #self.sphere_point_index += 1
+                # Wait for magnetic field and magnetometers to stabilize before reading
+                self.debug(f"[{self.sphere_point_index}] Field set, waiting {self.SETTLE_TIME_MS}ms to stabilize...", type=TYPE_INFO)
+                QTimer.singleShot(self.SETTLE_TIME_MS, self._request_mag_readings)
 
         return
 
