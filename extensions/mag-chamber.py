@@ -12,7 +12,15 @@ import socket
 
 HOST = "127.0.0.1"
 PORT = 5555
-SPHERE_POINTS_FILE = os.path.join(os.path.dirname(__file__), "sphere_points.txt")
+
+# Available test modes and their corresponding sphere point files
+EXTENSION_DIR = os.path.dirname(__file__)
+TEST_MODES = {
+    "cal":      ("sphere_points.txt",       "Full Calibration (700mG sphere)"),
+    "leo":      ("leo_sphere_points.txt",   "LEO Residual Test (200 points, 300-600mG)"),
+    "leo-quick":("leo_specific_tests.txt",  "LEO Quick Test (21 key vectors)"),
+}
+DEFAULT_MODE = "cal"
 
 '''
 This is a template for creating a custom extension for interacting with a serial device. 
@@ -55,7 +63,14 @@ self.end()
 
 '''
 class Extension(SK_Extension):
-    '''To Be Loaded Correctly, the class must be named "Extension" and inherit the SK_Extension class. '''
+    '''To Be Loaded Correctly, the class must be named "Extension" and inherit the SK_Extension class. 
+    
+    Usage modes (pass as argument when starting extension):
+        ext mag-chamber           - Full calibration mode (default, 700mG sphere)
+        ext mag-chamber leo       - LEO residual test (200 points, 300-600mG)
+        ext mag-chamber leo-quick - LEO quick test (21 key vectors)
+        ext mag-chamber help      - Show available modes
+    '''
 
 
     socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
@@ -65,6 +80,8 @@ class Extension(SK_Extension):
     killed = False 
     socket_timer = None
     serial_number = "sn-unknown"
+    test_mode = DEFAULT_MODE
+    sphere_points_file = None
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
@@ -117,32 +134,89 @@ class Extension(SK_Extension):
             self.killed = True
 
     '''User-Defined event for when the extension is started
-    args* are optional arguments passed in when the extension is started'''
+    args* are optional arguments passed in when the extension is started
+    
+    Usage:
+        ext mag-chamber           - Full calibration mode (default)
+        ext mag-chamber leo       - LEO residual test (200 points)
+        ext mag-chamber leo-quick - LEO quick test (21 key vectors)
+        ext mag-chamber help      - Show available modes
+    '''
     def event_start(self, *args):
-        with open(SPHERE_POINTS_FILE, "r") as f:
+        # Parse mode argument
+        if args:
+            mode_arg = args[0].lower().strip()
+            
+            # Handle help command
+            if mode_arg in ["help", "-h", "--help", "?"]:
+                self.debug("=" * 50, type=TYPE_INFO)
+                self.debug("MAG-CHAMBER EXTENSION - Available Modes:", type=TYPE_INFO)
+                self.debug("=" * 50, type=TYPE_INFO)
+                for mode, (filename, description) in TEST_MODES.items():
+                    self.debug(f"  {mode:<12} - {description}", type=TYPE_INFO)
+                self.debug("", type=TYPE_INFO)
+                self.debug("Usage: ext mag-chamber [mode]", type=TYPE_INFO)
+                self.debug("Example: ext mag-chamber leo-quick", type=TYPE_INFO)
+                self.debug("=" * 50, type=TYPE_INFO)
+                self.end()
+                return
+            
+            # Set mode if valid
+            if mode_arg in TEST_MODES:
+                self.test_mode = mode_arg
+            else:
+                self.debug(f"Unknown mode: '{mode_arg}'. Use 'help' to see available modes.", type=TYPE_ERROR)
+                self.debug(f"Falling back to default mode: '{DEFAULT_MODE}'", type=TYPE_INFO)
+                self.test_mode = DEFAULT_MODE
+        else:
+            self.test_mode = DEFAULT_MODE
+        
+        # Get sphere points file for this mode
+        filename, description = TEST_MODES[self.test_mode]
+        self.sphere_points_file = os.path.join(EXTENSION_DIR, filename)
+        
+        # Check if file exists
+        if not os.path.exists(self.sphere_points_file):
+            self.debug(f"ERROR: Sphere points file not found: {self.sphere_points_file}", type=TYPE_ERROR)
+            if self.test_mode != "cal":
+                self.debug("Run 'python3 generate_leo_test_points.py' to create LEO test files", type=TYPE_ERROR)
+            self.end()
+            return
+        
+        self.debug("=" * 50, type=TYPE_INFO)
+        self.debug(f"MODE: {self.test_mode} - {description}", type=TYPE_INFO)
+        self.debug(f"FILE: {filename}", type=TYPE_INFO)
+        self.debug("=" * 50, type=TYPE_INFO)
+        
+        # Load sphere points
+        self.sphere_points = []
+        with open(self.sphere_points_file, "r") as f:
             for line in f:
                 line = line.strip().rstrip()
                 if line:
                     self.sphere_points.append(line)
-                    #self.debug(line, type = TYPE_INFO)
 
         self.debug(f"Loaded {len(self.sphere_points)} sphere points", type = TYPE_INFO)
         self.socket.connect((HOST, PORT))
-        #self.send_to_server("sk-info testing\n")
         
         # Set up timer to check for socket data periodically
         self.socket_timer = QTimer()
         self.socket_timer.timeout.connect(self.check_socket_data)
         self.socket_timer.start(10)  # Check every 10ms
         time.sleep(.1)
-        self.send_to_server(f'plot kv --keys "MAGX,MAGY,MAGZ,MAG2X,MAG2Y,MAG2Z,MAG3X,MAG3Y,MAG3Z" --points {len(self.sphere_points) + 1} --title "MAG CAL"')
+        
+        # Set plot title based on mode
+        if self.test_mode == "cal":
+            plot_title = "MAG CAL"
+        else:
+            plot_title = f"MAG RESIDUAL TEST ({self.test_mode})"
+        
+        self.send_to_server(f'plot kv --keys "MAGX,MAGY,MAGZ,MAG2X,MAG2Y,MAG2Z,MAG3X,MAG3Y,MAG3Z" --points {len(self.sphere_points) + 1} --title "{plot_title}"')
         time.sleep(.05)
         self.send_to_server("i.cancel;i.int=0;p.int=0;i.cfg=0;")
         time.sleep(.1)
         self.send_to_server("sn") 
 
-
-        
         return 
 
     '''User-Defined event for when a connection is made to a serial port'''
@@ -179,7 +253,13 @@ class Extension(SK_Extension):
     '''If you want to end the extension, you must call self.end(), which in turn will call this function'''
     def event_end(self):
         self.send("stop")
-        export_name = f"mag-cal-{self.serial_number}.csv"
+        
+        # Use mode-specific export name
+        if self.test_mode == "cal":
+            export_name = f"mag-cal-{self.serial_number}.csv"
+        else:
+            export_name = f"mag-residual-{self.test_mode}-{self.serial_number}.csv"
+        
         self.send_to_server(f"plot export {export_name}")
         time.sleep(.1)
         self.send_to_server(f"log -o {export_name}")
@@ -189,6 +269,7 @@ class Extension(SK_Extension):
         time.sleep(.1)
         self.socket.close() 
         self.debug("Socket closed")
+        self.debug(f"Data exported to: {export_name}", type=TYPE_INFO)
         return 
     
 
