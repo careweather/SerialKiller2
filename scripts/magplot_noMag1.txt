@@ -1,0 +1,7 @@
+# This is a script for plotting mag values 
+@args 100 500
+@delay $ARG0
+@plot key-value --keys "MAG2X,MAG2Y,MAG2Z,MAG3X,MAG3Y,MAG3Z" --points $ARG1 --refs "-500,0,500" --title "Mag1, Mag2, Mag3 Output on the Satellite"
+@loop
+mag2.print;mag3.print;
+@endloop
