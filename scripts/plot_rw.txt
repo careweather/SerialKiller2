@@ -1,0 +1,9 @@
+@info=Plotting Reaction wheel RPM's
+@delay=500
+@exitcmd=rw.br;rw.end;
+rw.cfg=1;rw.begin;
+@wait=3000
+@plot key-value --keys "RPM0,RPM1,RPM2" --points 1000 --title 'Reaction wheel RPMs'
+@loop
+rw.print;
+@endloop

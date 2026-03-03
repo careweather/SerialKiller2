@@ -1,0 +1,40 @@
+@info=EMI Test: Deceleration - Brake wheel from max speed to 0 with max torque
+@delay=500
+f.clr=adcs;
+f.track=1;
+@wait=100
+rw.mult=1,1,1;
+a.fmt=3584;
+a.upd=250;
+a.dur=413;
+a.status=1;
+rw.cfg=1;
+rw.begin;
+@wait=3000
+@exitcmd=rw.br;rw.end;
+
+@info=Wheel 0 spin up then max braking
+rw.setrpm=6000,0,0;
+@wait=10000
+rw.br;
+@wait=8000
+
+@info=Wheel 1 spin up then max braking
+rw.setrpm=0,6000,0;
+@wait=10000
+rw.br;
+@wait=8000
+
+@info=Wheel 2 spin up then max braking
+rw.setrpm=0,0,6000;
+@wait=10000
+rw.br;
+@wait=8000
+
+@info=All wheels spin up then simultaneous braking
+rw.setrpm=6000,6000,6000;
+@wait=12000
+rw.br;
+@wait=8000
+
+rw.end;

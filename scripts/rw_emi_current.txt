@@ -1,0 +1,84 @@
+@info=EMI Test: Varying Current Levels - Steady current at 60mA, 90mA, 110mA to observe magnetic field scaling
+@delay=500
+f.clr=adcs;
+f.track=1;
+@wait=100
+rw.mult=1,1,1;
+a.fmt=3584;
+a.upd=250;
+a.dur=413;
+a.status=1;
+rw.cfg=1;
+rw.begin;
+@wait=3000
+@exitcmd=rw.br;rw.end;
+
+@info=Wheel 0 - 60mA steady current
+rw.cur=60,0,0;
+rw.setcur;
+@wait=15000
+
+@info=Wheel 0 - 90mA steady current
+rw.cur=90,0,0;
+rw.setcur;
+@wait=15000
+
+@info=Wheel 0 - 110mA steady current
+rw.cur=110,0,0;
+rw.setcur;
+@wait=15000
+rw.br;
+@wait=5000
+
+@info=Wheel 1 - 60mA steady current
+rw.cur=0,60,0;
+rw.setcur;
+@wait=15000
+
+@info=Wheel 1 - 90mA steady current
+rw.cur=0,90,0;
+rw.setcur;
+@wait=15000
+
+@info=Wheel 1 - 110mA steady current
+rw.cur=0,110,0;
+rw.setcur;
+@wait=15000
+rw.br;
+@wait=5000
+
+@info=Wheel 2 - 60mA steady current
+rw.cur=0,0,60;
+rw.setcur;
+@wait=15000
+
+@info=Wheel 2 - 90mA steady current
+rw.cur=0,0,90;
+rw.setcur;
+@wait=15000
+
+@info=Wheel 2 - 110mA steady current
+rw.cur=0,0,110;
+rw.setcur;
+@wait=15000
+rw.br;
+@wait=5000
+
+@info=All wheels - 60mA steady current
+rw.cur=60,60,60;
+rw.setcur;
+@wait=15000
+
+@info=All wheels - 90mA steady current
+rw.cur=90,90,90;
+rw.setcur;
+@wait=15000
+
+@info=All wheels - 110mA steady current
+rw.cur=110,110,110;
+rw.setcur;
+@wait=15000
+
+rw.br;
+@wait=5000
+rw.end;
