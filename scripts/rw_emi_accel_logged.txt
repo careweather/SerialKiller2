@@ -3,13 +3,12 @@ log -n rw_emi_accel.txt
 @log on
 @delay=100
 f.clr=adcs;
-f.track=1;
 @wait=100
 rw.mult=1,1,1;
 rw.cfg=1;
 rw.begin;
 @wait=3000
-@exitcmd=rw.br;rw.end;log -s rw_emi_accel.txt;log off;
+@exitcmd=rw.br;rw.end;log off;
 
 @info=Baseline logging for 10 seconds (no reaction wheels active)
 @loop=200
@@ -74,5 +73,4 @@ adcs=69120;
 @endloop
 
 rw.end;
-log -s rw_emi_accel.txt
 @log off
