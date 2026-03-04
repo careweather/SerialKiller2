@@ -1,0 +1,70 @@
+@info=EMI Test: Deceleration - Brake wheel from max speed to 0 with max torque (with ADCS logging at 20 Hz)
+log -n rw_emi_decel.txt
+@log on
+@delay=100
+f.clr=adcs;
+f.track=1;
+@wait=100
+rw.mult=1,1,1;
+rw.cfg=1;
+rw.begin;
+@wait=3000
+@exitcmd=rw.br;rw.end;log -s rw_emi_decel.txt;log off;
+
+@info=Baseline logging for 10 seconds (no reaction wheels active)
+@loop=200
+adcs=69120;
+@wait=50
+@endloop
+
+@info=Wheel 0 spin up then max braking with ADCS polling
+rw.setrpm=6000,0,0;
+@loop=200
+adcs=69120;
+@wait=50
+@endloop
+rw.br;
+@loop=160
+adcs=69120;
+@wait=50
+@endloop
+
+@info=Wheel 1 spin up then max braking with ADCS polling
+rw.setrpm=0,6000,0;
+@loop=200
+adcs=69120;
+@wait=50
+@endloop
+rw.br;
+@loop=160
+adcs=69120;
+@wait=50
+@endloop
+
+@info=Wheel 2 spin up then max braking with ADCS polling
+rw.setrpm=0,0,6000;
+@loop=200
+adcs=69120;
+@wait=50
+@endloop
+rw.br;
+@loop=160
+adcs=69120;
+@wait=50
+@endloop
+
+@info=All wheels spin up then simultaneous braking
+rw.setrpm=6000,6000,6000;
+@loop=240
+adcs=69120;
+@wait=50
+@endloop
+rw.br;
+@loop=160
+adcs=69120;
+@wait=50
+@endloop
+
+rw.end;
+log -s rw_emi_decel.txt
+@log off

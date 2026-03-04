@@ -7,13 +7,14 @@ rw.mult=1,1,1;
 a.fmt=3584;
 a.upd=250;
 a.dur=413;
-a.status=1;
 rw.cfg=1;
 rw.begin;
 @wait=3000
-@exitcmd=rw.br;rw.end;
+@exitcmd=rw.br;rw.end;a.status=0;
 
 @info=Wheel 0 - 60mA steady current
+a.status=1;
+@wait=100
 rw.cur=60,0,0;
 rw.setcur;
 @wait=15000

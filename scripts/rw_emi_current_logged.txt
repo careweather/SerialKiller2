@@ -1,0 +1,138 @@
+@info=EMI Test: Varying Current Levels - Steady current at 60mA, 90mA, 110mA (with ADCS logging at 20 Hz)
+log -n rw_emi_current.txt
+@log on
+@delay=100
+f.clr=adcs;
+f.track=1;
+@wait=100
+rw.mult=1,1,1;
+rw.cfg=1;
+rw.begin;
+@wait=3000
+@exitcmd=rw.br;rw.end;log -s rw_emi_current.txt;log off;
+
+@info=Baseline logging for 10 seconds (no reaction wheels active)
+@loop=200
+adcs=69120;
+@wait=50
+@endloop
+
+@info=Wheel 0 - 60mA steady current
+rw.cur=60,0,0;
+rw.setcur;
+@loop=300
+adcs=69120;
+@wait=50
+@endloop
+
+@info=Wheel 0 - 90mA steady current
+rw.cur=90,0,0;
+rw.setcur;
+@loop=300
+adcs=69120;
+@wait=50
+@endloop
+
+@info=Wheel 0 - 110mA steady current
+rw.cur=110,0,0;
+rw.setcur;
+@loop=300
+adcs=69120;
+@wait=50
+@endloop
+rw.br;
+@loop=100
+adcs=69120;
+@wait=50
+@endloop
+
+@info=Wheel 1 - 60mA steady current
+rw.cur=0,60,0;
+rw.setcur;
+@loop=300
+adcs=69120;
+@wait=50
+@endloop
+
+@info=Wheel 1 - 90mA steady current
+rw.cur=0,90,0;
+rw.setcur;
+@loop=300
+adcs=69120;
+@wait=50
+@endloop
+
+@info=Wheel 1 - 110mA steady current
+rw.cur=0,110,0;
+rw.setcur;
+@loop=300
+adcs=69120;
+@wait=50
+@endloop
+rw.br;
+@loop=100
+adcs=69120;
+@wait=50
+@endloop
+
+@info=Wheel 2 - 60mA steady current
+rw.cur=0,0,60;
+rw.setcur;
+@loop=300
+adcs=69120;
+@wait=50
+@endloop
+
+@info=Wheel 2 - 90mA steady current
+rw.cur=0,0,90;
+rw.setcur;
+@loop=300
+adcs=69120;
+@wait=50
+@endloop
+
+@info=Wheel 2 - 110mA steady current
+rw.cur=0,0,110;
+rw.setcur;
+@loop=300
+adcs=69120;
+@wait=50
+@endloop
+rw.br;
+@loop=100
+adcs=69120;
+@wait=50
+@endloop
+
+@info=All wheels - 60mA steady current
+rw.cur=60,60,60;
+rw.setcur;
+@loop=300
+adcs=69120;
+@wait=50
+@endloop
+
+@info=All wheels - 90mA steady current
+rw.cur=90,90,90;
+rw.setcur;
+@loop=300
+adcs=69120;
+@wait=50
+@endloop
+
+@info=All wheels - 110mA steady current
+rw.cur=110,110,110;
+rw.setcur;
+@loop=300
+adcs=69120;
+@wait=50
+@endloop
+
+rw.br;
+@loop=100
+adcs=69120;
+@wait=50
+@endloop
+rw.end;
+log -s rw_emi_current.txt
+@log off
