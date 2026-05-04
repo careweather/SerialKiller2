@@ -49,7 +49,7 @@ OPTIONS:
 
 def run():
     input_args = sys.argv[1:]
-    open_commands = []
+    open_commands = ["con E4624081CB244634", "ext ground", "ts=$UTS"]
     x_size = 700
     y_size = 800
     has_open_cmds = False 
