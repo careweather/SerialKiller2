@@ -1,0 +1,9 @@
+@info=adcs-cpp + star-tracker-sim + radar continuous, true worst case test proving whether we can run all three in parallel
+@delay=100
+f.clr=bb_lock;
+bb.cfg=2;bb.timeout=100000;bb.maxon=100000;
+f.cwln="bb_run,a.upd=500;a.dur=200;a.fmt=4678;f.clr=adcs;wait=8000;bb.cmd=echo performance > /sys/devices/system/cpu/cpu0/cpufreq/scaling_governor;"
+f.wr="bb_run,bb.cmd=adcs-cpp -T 300 -o cpp_telem.csv --bench_csv cpp_bench.csv";
+f.wr="bb_run, & star-tracker-sim --period 0 --duration 300 --attitude-csv /root/st_telem.csv";
+f.wr="bb_run, & radar -b 300 -ch 8 & wait";
+f.clr=radar;rw.cfg=0;i.cfg=0;
