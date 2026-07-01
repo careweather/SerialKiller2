@@ -103,7 +103,10 @@ class SK_Logger(QObject):
         if not self.enabled:
             return 
         try: 
-            self.logger.warning(text, extra = self.port_properties)
+            # Clean up problematic Unicode characters that can't be encoded in cp1252
+            # Replace Unicode replacement characters and other problematic chars
+            clean_text = text.replace('\ufffd', '?').encode('cp1252', errors='replace').decode('cp1252')
+            self.logger.warning(clean_text, extra = self.port_properties)
         except Exception as e:
             vprint(f"Error writing to logger: {e}", color = "red")
             vprint(f"Text: {text}", color = "red")

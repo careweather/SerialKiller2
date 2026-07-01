@@ -307,7 +307,7 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         self.pushButton_run_script.setStyleSheet(STYLESHEET_BUTTON_GREEN)
         self.pushButton_clear_table.clicked.connect(lambda: self.key_command(**{"--clear": None}))
         # self.pushButton_restart_logger.clicked.connect(lambda: self.log_start(force_reconfigure=True))
-        self.pushButton_plot_export.clicked.connect(self.plot_export)
+        self.pushButton_plot_export.clicked.connect(lambda: self.plot_export())
         self.pushButton_plot_export.setEnabled(False)
         self.pushButton_open_script.clicked.connect(self.open_script)
         self.pushButton_load_settings.clicked.connect(lambda: self.settings_command(**{"--load": None}))
@@ -820,8 +820,35 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         self.current_port = port
 
         ser.close()
-        ser.open()
-        ser.set_low_latency_mode(True)
+        try:
+            ser.open()
+        except serial.SerialException as exc:
+            ser.close()
+            self.current_port = None
+            self.last_connected_port = None
+            hint = ""
+            errno = getattr(exc, "errno", None)
+            if errno == 13:
+                hint = (
+                    "Another application may already be using this port or the device rejected the "
+                    "requested hardware flow-control settings. Close other programs that access "
+                    "the same COM port, unplug/replug the device, and verify that RTS/CTS and "
+                    "DSR/DTR are only enabled when the target supports them."
+                )
+            elif isinstance(exc, FileNotFoundError):
+                hint = "Verify the device is still connected and the COM port number has not changed."
+            message = f"Failed to open {port.Device}: {exc}"
+            if hint:
+                message += f"\n{hint}"
+            self.set_debug_text(message, color=COLOR_RED)
+            self.terminal_add_text(message, type=TYPE_ERROR)
+            self.update_status_bar()
+            return
+        try:
+            ser.set_low_latency_mode(True)
+        except AttributeError:
+            # set_low_latency_mode is not available in standard pySerial
+            pass
 
         if not ser.is_open:
             self.set_debug_text(f"Failed to connect to {port}", color=COLOR_RED)
@@ -899,9 +926,10 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
             # self.terminal_add_text("Auto Reconnect Disabled", type = TYPE_INFO)
             pass
 
-        self.serial_worker.stop()
-        time.sleep(0.02)
-        self.serial_thread.exit()
+        if self.serial_worker is not None:
+            self.serial_worker.stop()
+            time.sleep(0.02)
+            self.serial_thread.exit()
 
         ser.cancel_read()
         ser.cancel_write()

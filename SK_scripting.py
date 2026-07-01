@@ -75,8 +75,6 @@ class ScriptWorker(QObject):
         self.vars["$ARG"] = self.input_args
         dprint(f"[SCRIPT] Script Initialized\nTEXT---------------\n{text}\nARGS---------------\n{args}\nDELAY---------------\n{delay}", color="green")
 
-        print(f"ID: {self.delay_timer.timerId()} {self.delay_timer.isActive()}")
-
     def recieve(self, input:str):
         pass
 
