@@ -12,12 +12,14 @@ import re
 
 
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
-DEFAULT_SETTINGS_PATH = os.path.join(BASE_DIR, "settings")
-DEFAULT_SETTINGS_FILE = os.path.join(BASE_DIR, "settings" ,"default.json")
-DEFAULT_SCRIPT_PATH = os.path.join(BASE_DIR, "scripts")
-DEFAULT_LOG_PATH = os.path.join(BASE_DIR, "logs")
-DEFAULT_PLOT_EXPORT_PATH = os.path.join(BASE_DIR, "logs")
-DEFAULT_EXTENSION_PATH = os.path.join(BASE_DIR, "extensions")
+# Nix (and other read-only installs) set SERIALKILLER_STATE to a writable data dir.
+STATE_DIR = os.environ.get("SERIALKILLER_STATE", BASE_DIR)
+DEFAULT_SETTINGS_PATH = os.path.join(STATE_DIR, "settings")
+DEFAULT_SETTINGS_FILE = os.path.join(STATE_DIR, "settings" ,"default.json")
+DEFAULT_SCRIPT_PATH = os.path.join(STATE_DIR, "scripts")
+DEFAULT_LOG_PATH = os.path.join(STATE_DIR, "logs")
+DEFAULT_PLOT_EXPORT_PATH = os.path.join(STATE_DIR, "logs")
+DEFAULT_EXTENSION_PATH = os.path.join(STATE_DIR, "extensions")
 DEFAULT_RESOURCES_PATH = os.path.join(BASE_DIR, "resources")
 DEFAULT_HELP_PATH = os.path.join(BASE_DIR, "readme.md")
 
@@ -26,16 +28,33 @@ DEFAULT_HELP_STYLE_PATH = os.path.join(BASE_DIR, "doc", "help.css")
 
 EXTENSION_TEMPLATE_PATH = os.path.join(DEFAULT_RESOURCES_PATH, "template.py")
 
+if STATE_DIR != BASE_DIR:
+    for _path in (
+        DEFAULT_SETTINGS_PATH,
+        DEFAULT_SCRIPT_PATH,
+        DEFAULT_LOG_PATH,
+        DEFAULT_EXTENSION_PATH,
+    ):
+        os.makedirs(_path, exist_ok=True)
 
-GIT_REPO = pygit2.Repository(BASE_DIR)
-GITHUB_BRANCH = GIT_REPO.head.shorthand
-GITHUB_TARGET = GIT_REPO.head.target
-GITHUB_LOG = GIT_REPO.head.log()
-GITHUB_COMMIT_DATE = ""
-for i, l in enumerate(GITHUB_LOG):
-    if i == 0:
-        GITHUB_COMMIT_DATE = datetime.datetime.fromtimestamp(l.committer.time).strftime("%Y-%m-%d %H:%M:%S")
-        break 
+
+GITHUB_BRANCH = os.environ.get("SERIALKILLER_GIT_BRANCH", "")
+GITHUB_TARGET = os.environ.get("SERIALKILLER_GIT_TARGET", "")
+GITHUB_COMMIT_DATE = os.environ.get("SERIALKILLER_GIT_DATE", "")
+GIT_REPO = None
+if not (GITHUB_BRANCH and GITHUB_TARGET):
+    try:
+        GIT_REPO = pygit2.Repository(BASE_DIR)
+        GITHUB_BRANCH = GITHUB_BRANCH or GIT_REPO.head.shorthand
+        GITHUB_TARGET = GITHUB_TARGET or str(GIT_REPO.head.target)
+        if not GITHUB_COMMIT_DATE:
+            for i, l in enumerate(GIT_REPO.head.log()):
+                if i == 0:
+                    GITHUB_COMMIT_DATE = datetime.datetime.fromtimestamp(l.committer.time).strftime("%Y-%m-%d %H:%M:%S")
+                    break
+    except Exception:
+        GITHUB_BRANCH = GITHUB_BRANCH or "unknown"
+        GITHUB_TARGET = GITHUB_TARGET or "unknown"
 
 ###########################################################################
 ################ DEBUGGING

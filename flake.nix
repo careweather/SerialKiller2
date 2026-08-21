@@ -26,28 +26,18 @@
           pyserial
         ]);
 
-        serialKillerApp = pkgs.writeShellApplication {
-          name = "serialkiller";
-          runtimeInputs = [ pythonDeps ];
-          text = ''
-            # Run SerialKiller from the flake root
-            python3 ./SK.py "$@"
-          '';
-          meta = {
-            description = "Serial terminal with CLI-like and GUI interfaces, scripting, logging, and real-time plotting";
-            longDescription = ''
-              Serial Killer is a serial terminal with both CLI-like and GUI
-              interfaces. It supports scripting, logging, keyboard control,
-              real-time plotting, user extensions, and auto-reconnect.
-            '';
-            homepage = "https://github.com/careweather/SerialKiller2";
-            license = lib.licenses.mpl20;
-            mainProgram = "serialkiller";
-            platforms = lib.platforms.unix;
-          };
-        };
+        lastModifiedDate = inputs.self.sourceInfo.lastModifiedDate or "";
+        gitDate =
+          if builtins.stringLength lastModifiedDate >= 8 then
+            "${builtins.substring 0 4 lastModifiedDate}-${builtins.substring 4 2 lastModifiedDate}-${builtins.substring 6 2 lastModifiedDate}"
+          else
+            "unknown";
       in {
-        packages.serialkiller = serialKillerApp;
+        packages.serialkiller = pkgs.callPackage ./package.nix {
+          gitBranch = inputs.self.sourceInfo.ref or "unknown";
+          gitTarget = inputs.self.rev or inputs.self.dirtyRev or "dirty";
+          inherit gitDate;
+        };
         packages.default = config.packages.serialkiller;
 
         apps.serialkiller = {
@@ -59,6 +49,7 @@
 
         devShells.default = pkgs.mkShell {
           buildInputs = with pkgs; [
+            config.packages.serialkiller
             pythonDeps
             screen # screen /dev/ttyUSB0 115200
             minicom # minicom -b 115200 -D /dev/ttyUSB0

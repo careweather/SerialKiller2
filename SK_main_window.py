@@ -2529,6 +2529,7 @@ def getComboBox_items(comboBox: QtWidgets.QComboBox) -> list[str]:
 def run_app(size_x=700, size_y=700, open_commands=""):
     global app
     app = QtWidgets.QApplication(sys.argv)
+    app.setDesktopFileName("serialkiller")
     app_icon = QtGui.QIcon()
     app_icon.addFile(os.path.join(BASE_DIR, "img", "SK_Icon.png"))
     app.setWindowIcon(app_icon)
